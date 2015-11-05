@@ -6,6 +6,7 @@ public class SoundManager
 {
     Dictionary<string, ISoundSource> soundHash;
     ISoundEngine engine;
+    public static readonly float VOLUME_MAX = .3f;
 
     public SoundManager(string path)
     {
@@ -23,6 +24,7 @@ public class SoundManager
     public void play(string name,bool looped = false)
     {
         ISoundSource sound = soundHash[name];
+        sound.DefaultVolume = VOLUME_MAX;
         engine.Play2D(sound, looped, false, false);
     }
 
