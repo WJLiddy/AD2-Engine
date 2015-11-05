@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 
 
 //TODO: come back to this.
@@ -9,20 +11,8 @@ using System.IO;
 //A collection of utility methods and variables for the AD2 Engine.
 public class Utils
 {
-    // TODO _ protections.The graphics device. Used to render stuff to the screen. 
-    public static GraphicsDevice gfx;
-
-    //TODO the sprite batch. needs a better name
-    public static SpriteBatch sb;
-
     //Path to your assets folder. Essential for referring to resources by name.
     public static string pathToAssets;
-
-    //A default font for quick writing.
-    public static PixelFont defaultFont { get; private set; }
-
-    //TODO better name. A sound manager. Use it to play musics and sound.
-    public static SoundManager soundManager { get; private set; }
 
     //A white rectangle so that drawing rectangles doesn't require loading sprites.
     private static Texture2D whiteRect;
@@ -61,57 +51,28 @@ public class Utils
  
         //TODO: Look for internal API, not project! for font and 
         System.IO.Stream stream = File.Open(Utils.pathToAssets + pathToTexture, FileMode.Open);
-        Texture2D t =  Texture2D.FromStream(gfx, stream);
+        Texture2D t =  Texture2D.FromStream(Renderer.graphicsDevice, stream);
         stream.Close();
         return t;
     }
 
+    //TODO setDirectory
+    public static void setAssetDirectory(string relativePathToAssets)
+    {
+        Directory.SetCurrentDirectory(relativePathToAssets);
+        Utils.pathToAssets = Directory.GetCurrentDirectory() + @"\";
+    }
+       
+
     public static void load()
     {
-        whiteRect = Utils.TextureLoader(@"misc/rect.png");
-        defaultFont = new PixelFont(@"misc/spireFont.png");
+        //TODO only works with debug
+        //Assume that assets is in the usual location.
+        //We can now read from this directory
+
+        //TODO wrong location
+      //  whiteRect = Utils.TextureLoader(@"misc/rect.png");
         random = new Random();
-        soundManager = new SoundManager("sound\\");
-    }
-
-    public static void drawTexture(Texture2D t, int x, int y)
-    {
-        sb.Draw(t, new Rectangle(x, y, t.Bounds.Width, t.Bounds.Height), Color.White);   
-    }
-
-    public static void drawTexture(Texture2D t, int x, int y, Color c)
-    {
-        sb.Draw(t, new Rectangle(x, y, t.Bounds.Width, t.Bounds.Height), c);
-    }
-
-    public static void drawTexture(Texture2D t, int x, int y, int w, int h)
-    {
-        sb.Draw(t, new Rectangle(x, y, w, h), Color.White);
-    }
-
-    public static void drawTextureHFlip(Texture2D t, int x, int y)
-    {
-        sb.Draw(t, new Rectangle(x, y, t.Bounds.Width, t.Bounds.Height), new Rectangle(0,0, t.Bounds.Width, t.Bounds.Height), Color.White,0f,new Vector2(),SpriteEffects.FlipHorizontally,0f);
-    }
-
-    public static void drawTexture(Texture2D t, int x, int y, int w, int h, Color c)
-    {
-        sb.Draw(t, new Rectangle(x, y, w, h), c);
-    }
-
-    public static void drawTexture(object logo, int x, int y, int size1, int size2)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static void drawRect(Color c, int x, int y, int w, int h)
-    {
-        Utils.drawTexture(whiteRect, x, y, w, h, c);
-    }
-
-    public static void drawString(string s, int x, int y, Color c, int scale = 1, bool outline = false)
-    {
-        defaultFont.draw(s, x,y, c, scale, outline);
     }
     
     //An expensive operation to find the color blend bewtween two colors.
@@ -138,6 +99,24 @@ public class Utils
         System.Console.WriteLine("LOG: " + message);
     }
 
+    // Return all elements from an XML, as a hash
+    public static Dictionary<string,string> getXMLEntriesHash(string pathToXML)
+    {
+        Dictionary<string, string> allEntries = new Dictionary<string,string>();
+        XmlReader rdr = XmlReader.Create(Utils.pathToAssets + pathToXML);
+        rdr.Read();
+        while (rdr.Read())
+        { 
+            if (rdr.NodeType == XmlNodeType.Element)
+            {
+                string key = rdr.LocalName;
+                string value = rdr.ReadElementContentAsString();
+                allEntries.Add(key, value);
+            }
+        }
+        rdr.Close();
+        return allEntries;
+    }
 }
 
 

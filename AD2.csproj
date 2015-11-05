@@ -42,9 +42,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AD2Game.cs" />
     <Compile Include="FlatMap.cs" />
     <Compile Include="PixelFont.cs" />
     <Compile Include="AnimationSet.cs" />
+    <Compile Include="Renderer.cs" />
     <Compile Include="SpriteMatrix.cs" />
     <Compile Include="ControllerManager.cs" />
     <Compile Include="IsometricMap.cs" />

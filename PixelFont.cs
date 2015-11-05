@@ -24,7 +24,7 @@ public class PixelFont
         widths= defaultSpacing();      
     }
 
-    public void draw(string s, int x, int y, Color col, int scale = 1, bool outline = false){
+    public void draw(SpriteBatch sb, string s, int x, int y, Color col, int scale = 1, bool outline = false){
         //Support upcase to get correct character codes.
         s = s.ToUpper();
 
@@ -38,14 +38,14 @@ public class PixelFont
             //Draws a black underline of the letter.
             if (outline)
             {
-                Utils.sb.Draw(font, new Rectangle(x + scale + xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
-                Utils.sb.Draw(font, new Rectangle(x + -scale + xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
-                Utils.sb.Draw(font, new Rectangle(x + xCursor, y + scale, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
-                Utils.sb.Draw(font, new Rectangle(x + xCursor, y - scale , scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
+                sb.Draw(font, new Rectangle(x + scale + xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
+                sb.Draw(font, new Rectangle(x + -scale + xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
+                sb.Draw(font, new Rectangle(x + xCursor, y + scale, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
+                sb.Draw(font, new Rectangle(x + xCursor, y - scale , scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
             }
 
             //Draws the actual letter.
-            Utils.sb.Draw(font, new Rectangle(x+xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), col);
+            sb.Draw(font, new Rectangle(x+xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), col);
 
             //increment the xCursor by the spacing and the widths.
             xCursor += spaceTakenByCharacter(scale, value, outline);

@@ -67,30 +67,29 @@ public class FlatMap
         fillCollisionAndWallArray(collisionMap, mapXML.collisionKey, mapXML.wallKey);
         
         //get the roof map.
-        roofs = new RenderTarget2D(Utils.gfx, screenWidth, screenHeight);
-        roofBatch = new SpriteBatch(Utils.gfx);
+        roofs = new RenderTarget2D(Renderer.graphicsDevice, screenWidth, screenHeight);
+        roofBatch = new SpriteBatch(Renderer.graphicsDevice);
 
     }
 
- 
-    public void drawBase(int x, int y, int w, int h)
+    public void drawBase(SpriteBatch sb, int x, int y, int w, int h)
     {
-        Utils.sb.Draw(baseMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
+        sb.Draw(baseMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
     }
 
-    public void drawBase(int x, int y)
+    public void drawBase(SpriteBatch sb, int x, int y)
     {
-        Utils.sb.Draw(baseMap, new Rectangle(0, 0, screenWidth, screenHeight), new Rectangle(x, y, screenWidth, screenHeight), Color.White);
+       sb.Draw(baseMap, new Rectangle(0, 0, screenWidth, screenHeight), new Rectangle(x, y, screenWidth, screenHeight), Color.White);
     }
 
-    public void drawAlways(int x, int y, int w, int h)
+    public void drawAlways(SpriteBatch sb, int x, int y, int w, int h)
     {
-        Utils.sb.Draw(alwaysMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
+        sb.Draw(alwaysMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
     }
 
-    public void drawAlways(int x, int y)
+    public void drawAlways(SpriteBatch sb, int x, int y)
     {
-        Utils.sb.Draw(alwaysMap, new Rectangle(0, 0, screenWidth, screenHeight), new Rectangle(x, y, screenWidth, screenHeight), Color.White);
+        sb.Draw(alwaysMap, new Rectangle(0, 0, screenWidth, screenHeight), new Rectangle(x, y, screenWidth, screenHeight), Color.White);
     }
 
     public bool collide(int x, int y)
@@ -119,8 +118,7 @@ public class FlatMap
         }
     }
 
-    
-
+   
     public FlatMapXML readMapXML(String pathToMap)
     {
         FlatMapXML pmx = new FlatMapXML();
@@ -159,11 +157,11 @@ public class FlatMap
     }
 
     //renders roofs based on passed-in los array
-    public void renderRoofs(Texture2D los, int camX, int camY, int w, int h)
+    public void renderRoofs(SpriteBatch sb,Texture2D los, int camX, int camY, int w, int h)
     {
         //clear the roof map to completely opaque
-        Utils.gfx.SetRenderTarget(roofs);
-        Utils.gfx.Clear(new Color(0, 0, 0, 1f));
+        Renderer.graphicsDevice.SetRenderTarget(roofs);
+        Renderer.graphicsDevice.Clear(new Color(0, 0, 0, 1f));
       
         roofBatch.Begin(SpriteSortMode.Deferred, getRoofBlendState(), null, null, null);
 
@@ -172,17 +170,17 @@ public class FlatMap
         roofBatch.Draw(roofMap, new Rectangle(0, 0, w, h), new Rectangle(camX, camY, w, h), Color.White);
 
         roofBatch.End();
-        Utils.gfx.SetRenderTarget(null);
+        Renderer.graphicsDevice.SetRenderTarget(null);
 
         //finally, render to spritebatch.
-        Utils.drawTexture(roofs, 0, 0);
+        Renderer.drawTexture(sb,roofs, 0, 0);
     }
 
 
     //renders roofs based on passed-in los array
-    public void renderRoofs(Texture2D los, int camX, int camY)
+    public void renderRoofs(SpriteBatch sb, Texture2D los, int camX, int camY)
     {
-        renderRoofs(los, camX, camY, screenWidth, screenHeight);
+        renderRoofs(sb, los, camX, camY, screenWidth, screenHeight);
     }
 
     //Does an OR with zeros: any pixel with an alpha of 0 is transparent no matter how many are piled on top

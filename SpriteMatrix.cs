@@ -36,17 +36,17 @@ public class SpriteMatrix
     }
     
     //draw a given frame at a given place at a given size. Allows for streching/resizing
-    public void draw(int xFrame, int yFrame, int x, int y, int w, int h)
+    public void draw(SpriteBatch sb,int xFrame, int yFrame, int x, int y, int w, int h)
     {
         checkIfValidFrame(xFrame, yFrame);
-        Utils.sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, w, h), new Rectangle(xFrame*frameWidth, yFrame*frameHeight, frameWidth, frameHeight), Color.White);
+        sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, w, h), new Rectangle(xFrame*frameWidth, yFrame*frameHeight, frameWidth, frameHeight), Color.White);
     }
 
     //draw a given frame at a given place with the exact pixel size.
-    public void draw(int xFrame, int yFrame, int x, int y)
+    public void draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y)
     {
         checkIfValidFrame(xFrame, yFrame);
-        Utils.sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, frameWidth, frameHeight), new Rectangle(xFrame * frameWidth, yFrame * frameHeight, frameWidth, frameHeight), Color.White);
+        sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, frameWidth, frameHeight), new Rectangle(xFrame * frameWidth, yFrame * frameHeight, frameWidth, frameHeight), Color.White);
     }
 
     public void readParameters(String pathToSheetXML)

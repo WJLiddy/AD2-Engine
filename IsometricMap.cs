@@ -69,29 +69,29 @@ public class Map
 
         createObjectMap(objectMapColor, objectMaskColor, pmx.baseKey, pmx.yKey);
 
-        roofs = new RenderTarget2D(Utils.gfx, w, h);
-        roofBatch = new SpriteBatch(Utils.gfx);
+        roofs = new RenderTarget2D(Renderer.graphicsDevice, w, h);
+        roofBatch = new SpriteBatch(Renderer.graphicsDevice);
 
     }
 
-    public void drawBase(int x, int y, int w, int h)
+    public void drawBase(SpriteBatch sb, int x, int y, int w, int h)
     {
-        Utils.sb.Draw(baseMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
+        sb.Draw(baseMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
     }
 
-    public void drawAlways(int x, int y, int w, int h)
+    public void drawAlways(SpriteBatch sb, int x, int y, int w, int h)
     {
-        Utils.sb.Draw(alwaysMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
+        sb.Draw(alwaysMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
     }
 
-    public void drawObjectLine(int x, int y, int w, int h, int step)
+    public void drawObjectLine(SpriteBatch sb, int x, int y, int w, int h, int step)
     {
         if (step + y >= 0 && step + y < (baseMap.Height))
         {
             if (allObjects[step + y] != null)
             {
                 MapObjectLine l = allObjects[step + y];
-                 Utils.sb.Draw(l.t, new Rectangle(-x, -y + (y + step) +- (l.h - 1), l.w, l.h), new Rectangle(0, 0, l.w, l.h), Color.White);
+                 sb.Draw(l.t, new Rectangle(-x, -y + (y + step) +- (l.h - 1), l.w, l.h), new Rectangle(0, 0, l.w, l.h), Color.White);
             }
         }
     }
@@ -134,11 +134,11 @@ public class Map
             allObjects[y] = new MapObjectLine();
             allObjects[y].w = baseMap.Width;
             allObjects[y].h = MAX_OBJECT_HEIGHT;
-            allObjects[y].t = new RenderTarget2D(Utils.gfx, baseMap.Width, MAX_OBJECT_HEIGHT);
+            allObjects[y].t = new RenderTarget2D(Renderer.graphicsDevice, baseMap.Width, MAX_OBJECT_HEIGHT);
 
-            SpriteBatch objRender = new SpriteBatch(Utils.gfx);
-            Utils.gfx.SetRenderTarget(allObjects[y].t);
-            Utils.gfx.Clear(Color.Transparent);
+            SpriteBatch objRender = new SpriteBatch(Renderer.graphicsDevice);
+            Renderer.graphicsDevice.SetRenderTarget(allObjects[y].t);
+            Renderer.graphicsDevice.Clear(Color.Transparent);
 
             objRender.Begin();
             bool drewSomething = false;
@@ -154,7 +154,7 @@ public class Map
                         h++;
                     }
 
-                    Texture2D newObject = new Texture2D(Utils.gfx, 1, h);
+                    Texture2D newObject = new Texture2D(Renderer.graphicsDevice, 1, h);
                     Color[] colorData = new Color[h];
 
                     for (int dh = 0; dh != h; dh++)
@@ -248,11 +248,11 @@ public class Map
         }
     }
 
-    public void renderRoofs(Texture2D los, int camX, int camY, int w, int h)
+    public void renderRoofs(SpriteBatch sb, Texture2D los, int camX, int camY, int w, int h)
     {
 
-        Utils.gfx.SetRenderTarget(roofs);
-        Utils.gfx.Clear(new Color(0, 0, 0, 1f));
+        Renderer.graphicsDevice.SetRenderTarget(roofs);
+        Renderer.graphicsDevice.Clear(new Color(0, 0, 0, 1f));
 
         BlendState bl = new BlendState();
 
@@ -269,9 +269,9 @@ public class Map
         roofBatch.Draw(roofMap, new Rectangle(0, 0, w, h), new Rectangle(camX, camY, w, h), Color.White);
 
         roofBatch.End();
-        Utils.gfx.SetRenderTarget(null);
+        Renderer.graphicsDevice.SetRenderTarget(null);
 
-        Utils.drawTexture(roofs, 0, 0);
+        Renderer.drawTexture(sb,roofs, 0, 0);
     }
 }
 

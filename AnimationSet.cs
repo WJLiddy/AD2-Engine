@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
@@ -86,15 +87,15 @@ public class AnimationSet
     }
 
     //draw the frame, but can be stretched
-    public void draw(int x, int y, int w, int h)
+    public void draw(SpriteBatch sb, int x, int y, int w, int h)
     {
-        currentAnimation.draw(xFrame,yFrame,x,y,w,h);
+        currentAnimation.draw(sb, xFrame,yFrame,x,y,w,h);
     }
 
     //draw the frame, no stretching.
-    public void draw(int x, int y)
+    public void draw(SpriteBatch sb, int x, int y)
     {
-        currentAnimation.draw(xFrame, yFrame, x, y);
+        currentAnimation.draw(sb, xFrame, yFrame, x, y);
     }
 
     //load in aniamation set.
