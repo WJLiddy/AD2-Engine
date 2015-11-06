@@ -5,9 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-
-//TODO: come back to this.
-
 //A collection of utility methods and variables for the AD2 Engine.
 public class Utils
 {
@@ -19,6 +16,9 @@ public class Utils
 
     //TODO: Random number generator.
     public static Random random;
+
+    //A default font for quick writing.
+    public static PixelFont defaultFont { get; private set; }
 
     public struct Mix
     {
@@ -48,30 +48,23 @@ public class Utils
 
     public static Texture2D TextureLoader(String pathToTexture)
     {
- 
-        //TODO: Look for internal API, not project! for font and 
-        System.IO.Stream stream = File.Open(Utils.pathToAssets + pathToTexture, FileMode.Open);
+        Stream stream = File.Open(Utils.pathToAssets + pathToTexture, FileMode.Open);
         Texture2D t =  Texture2D.FromStream(Renderer.graphicsDevice, stream);
         stream.Close();
         return t;
     }
 
-    //TODO setDirectory
     public static void setAssetDirectory(string relativePathToAssets)
     {
         Directory.SetCurrentDirectory(relativePathToAssets);
         Utils.pathToAssets = Directory.GetCurrentDirectory() + @"\";
     }
        
-
     public static void load()
     {
-        //TODO only works with debug
-        //Assume that assets is in the usual location.
-        //We can now read from this directory
-
-        //TODO wrong location
-      //  whiteRect = Utils.TextureLoader(@"misc/rect.png");
+        whiteRect = Utils.TextureLoader(@"..\..\API\assets\rect.png");
+        defaultFont = new PixelFont(@"..\..\API\assets\spireFont.png");
+        SoundManager.load("sounds/");
         random = new Random();
     }
     
@@ -100,6 +93,7 @@ public class Utils
     }
 
     // Return all elements from an XML, as a hash
+    // LOL we dont use this yet TODO
     public static Dictionary<string,string> getXMLEntriesHash(string pathToXML)
     {
         Dictionary<string, string> allEntries = new Dictionary<string,string>();

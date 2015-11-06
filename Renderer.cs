@@ -7,36 +7,32 @@ public class Renderer
     //Graphics Device Manager is needed by a lot functions.
     public static GraphicsDeviceManager graphicsDeviceManager;
 
+    //Graphics device to use.
     public static GraphicsDevice graphicsDevice;
 
-    //A Spritebatch, that gets rendered to the screen.
-    public SpriteBatch primarySpriteBatch { get; private set; }
-
-    //A default font for quick writing.
-    public PixelFont defaultFont { get; private set; }
-
+    //The streching we do to fill the screen with the game.
+    //TODO: private?
+    public static Matrix matrixScale;
 
     //Draw parameters
-    int drawScaleX = 1;
-    int drawScaleY = 1;
-    int drawXOff= 0;
-    int drawYOff = 0;
-    int baseHeight = 0;
-    int baseWidth = 0;
-    Matrix matrixScale;
+    public static int drawScaleX = 1;
+    public static int drawScaleY = 1;
+    public static int drawXOff = 0;
+    public static int drawYOff = 0;
+    public static int baseHeight = 0;
+    public static int baseWidth = 0;
 
-    public Renderer(int baseWidth, int baseHeight)
+    public static void setResolution(int baseWidthi, int baseHeighti)
     {
-        primarySpriteBatch = new SpriteBatch(graphicsDeviceManager.GraphicsDevice);
-        this.baseWidth = baseWidth;
-        this.baseHeight = baseHeight;
+        baseWidth = baseWidthi;
+        baseHeight = baseHeighti;
         configureResolution(false,false);
 
         //force vsync?
         //graphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
     }
 
-    private void configureResolution(bool fullscreen, bool fullscreenWithAntiAlias)
+    private static void configureResolution(bool fullscreen, bool fullscreenWithAntiAlias)
     {
         graphicsDeviceManager.IsFullScreen = fullscreen;
 
@@ -79,58 +75,16 @@ public class Renderer
 
         //now that we know the resolution, make the matrix for it for scaling later.
         matrixScale = Matrix.Identity;
-        matrixScale.M11 = drawScaleX; matrixScale.M22 = drawScaleY;
+        matrixScale.M11 = drawScaleX;
+        matrixScale.M22 = drawScaleY;
         matrixScale.Translation = new Vector3(drawXOff, drawYOff, 0);
 
         graphicsDeviceManager.ApplyChanges();
     }
 
-    public void startDraw()
-    {  //nuke old graphics.
-        graphicsDeviceManager.GraphicsDevice.Clear(Color.Black);
-
-        //set the spritebatch to start.
-        primarySpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, matrixScale);
-    }
-
-    public void endDraw()
-    {
-        primarySpriteBatch.End();
-    }
-
-    public static void drawTexture(SpriteBatch sb, Texture2D t, int x, int y)
-    {
-        sb.Draw(t, new Rectangle(x, y, t.Bounds.Width, t.Bounds.Height), Color.White);
-    }
-
-    public static void drawTexture(SpriteBatch sb, Texture2D t, int x, int y, Color c)
-    {
-        sb.Draw(t, new Rectangle(x, y, t.Bounds.Width, t.Bounds.Height), c);
-    }
-
-    public static void drawTexture(SpriteBatch sb, Texture2D t, int x, int y, int w, int h)
-    {
-        sb.Draw(t, new Rectangle(x, y, w, h), Color.White);
-    }
-
-    public static void drawTextureHFlip(SpriteBatch sb, Texture2D t, int x, int y)
-    {
-        sb.Draw(t, new Rectangle(x, y, t.Bounds.Width, t.Bounds.Height), new Rectangle(0, 0, t.Bounds.Width, t.Bounds.Height), Color.White, 0f, new Vector2(), SpriteEffects.FlipHorizontally, 0f);
-    }
-
-    public static void drawTexture(SpriteBatch sb, Texture2D t, int x, int y, int w, int h, Color c)
-    {
-        sb.Draw(t, new Rectangle(x, y, w, h), c);
-    }
-
-
- //   public void drawRect(Color c, int x, int y, int w, int h)
-  //  {
+   //public void drawRect(Color c, int x, int y, int w, int h)
+   // {
    //     Utils.drawTexture(whiteRect, x, y, w, h, c);
-    //}
+   // }
 
-    public void drawString(SpriteBatch sb, string s, int x, int y, Color c, int scale = 1, bool outline = false)
-    {
-        defaultFont.draw(sb, s, x, y, c, scale, outline);
-    }
 }

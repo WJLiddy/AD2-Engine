@@ -4,11 +4,11 @@ using System.IO;
 
 public class SoundManager
 {
-    Dictionary<string, ISoundSource> soundHash;
-    ISoundEngine engine;
+    public static Dictionary<string, ISoundSource> soundHash;
+    public static ISoundEngine engine;
     public static readonly float VOLUME_MAX = .3f;
 
-    public SoundManager(string path)
+    public static void load(string path)
     {
         engine = new ISoundEngine();
         soundHash = new Dictionary<string, ISoundSource>();
@@ -33,4 +33,3 @@ public class SoundManager
         engine.RemoveAllSoundSources();
     }
 }
-

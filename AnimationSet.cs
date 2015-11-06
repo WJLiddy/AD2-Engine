@@ -10,10 +10,11 @@ using System.Xml;
 
 //our implemetaion of a single animation is a sprite matrix.ons.
 
-//play once finction
+//TODO play once finction
 public class AnimationSet
 {
     //The name of the animation that is defaulted to on load.
+    //TODO Enumize
     private readonly String DEFAULT_ANIMATION_NAME = "idle";
 
     //All of the sprite matrixes in this set.
@@ -87,18 +88,18 @@ public class AnimationSet
     }
 
     //draw the frame, but can be stretched
-    public void draw(SpriteBatch sb, int x, int y, int w, int h)
+    public void draw(AD2SpriteBatch sb, int x, int y, int w, int h)
     {
         currentAnimation.draw(sb, xFrame,yFrame,x,y,w,h);
     }
 
     //draw the frame, no stretching.
-    public void draw(SpriteBatch sb, int x, int y)
+    public void draw(AD2SpriteBatch sb, int x, int y)
     {
         currentAnimation.draw(sb, xFrame, yFrame, x, y);
     }
 
-    //load in aniamation set.
+    //load in aniamation set. TODO: Use utils.XML
     private Hashtable loadAnimations(String pathToXML)
     {
         Hashtable loadedAnimations = new Hashtable();

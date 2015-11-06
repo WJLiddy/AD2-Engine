@@ -42,6 +42,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AD2SpriteBatch.cs" />
     <Compile Include="AD2Game.cs" />
     <Compile Include="FlatMap.cs" />
     <Compile Include="PixelFont.cs" />

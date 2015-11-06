@@ -248,7 +248,7 @@ public class Map
         }
     }
 
-    public void renderRoofs(SpriteBatch sb, Texture2D los, int camX, int camY, int w, int h)
+    public void renderRoofs(AD2SpriteBatch sb, Texture2D los, int camX, int camY, int w, int h)
     {
 
         Renderer.graphicsDevice.SetRenderTarget(roofs);
@@ -271,7 +271,7 @@ public class Map
         roofBatch.End();
         Renderer.graphicsDevice.SetRenderTarget(null);
 
-        Renderer.drawTexture(sb,roofs, 0, 0);
+        sb.drawTexture(roofs, 0, 0);
     }
 }
 

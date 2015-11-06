@@ -72,22 +72,22 @@ public class FlatMap
 
     }
 
-    public void drawBase(SpriteBatch sb, int x, int y, int w, int h)
+    public void drawBase(AD2SpriteBatch sb, int x, int y, int w, int h)
     {
         sb.Draw(baseMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
     }
 
-    public void drawBase(SpriteBatch sb, int x, int y)
+    public void drawBase(AD2SpriteBatch sb, int x, int y)
     {
        sb.Draw(baseMap, new Rectangle(0, 0, screenWidth, screenHeight), new Rectangle(x, y, screenWidth, screenHeight), Color.White);
     }
 
-    public void drawAlways(SpriteBatch sb, int x, int y, int w, int h)
+    public void drawAlways(AD2SpriteBatch sb, int x, int y, int w, int h)
     {
         sb.Draw(alwaysMap, new Rectangle(0, 0, w, h), new Rectangle(x, y, w, h), Color.White);
     }
 
-    public void drawAlways(SpriteBatch sb, int x, int y)
+    public void drawAlways(AD2SpriteBatch sb, int x, int y)
     {
         sb.Draw(alwaysMap, new Rectangle(0, 0, screenWidth, screenHeight), new Rectangle(x, y, screenWidth, screenHeight), Color.White);
     }
@@ -118,7 +118,6 @@ public class FlatMap
         }
     }
 
-   
     public FlatMapXML readMapXML(String pathToMap)
     {
         FlatMapXML pmx = new FlatMapXML();
@@ -157,7 +156,7 @@ public class FlatMap
     }
 
     //renders roofs based on passed-in los array
-    public void renderRoofs(SpriteBatch sb,Texture2D los, int camX, int camY, int w, int h)
+    public void renderRoofs(AD2SpriteBatch sb,Texture2D los, int camX, int camY, int w, int h)
     {
         //clear the roof map to completely opaque
         Renderer.graphicsDevice.SetRenderTarget(roofs);
@@ -173,12 +172,11 @@ public class FlatMap
         Renderer.graphicsDevice.SetRenderTarget(null);
 
         //finally, render to spritebatch.
-        Renderer.drawTexture(sb,roofs, 0, 0);
+        sb.drawTexture(roofs, 0, 0);
     }
 
-
     //renders roofs based on passed-in los array
-    public void renderRoofs(SpriteBatch sb, Texture2D los, int camX, int camY)
+    public void renderRoofs(AD2SpriteBatch sb, Texture2D los, int camX, int camY)
     {
         renderRoofs(sb, los, camX, camY, screenWidth, screenHeight);
     }
