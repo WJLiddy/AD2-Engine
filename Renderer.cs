@@ -22,34 +22,60 @@ public class Renderer
     public static int baseHeight = 0;
     public static int baseWidth = 0;
 
+    //some basic resolution options
+   public enum Resolution
+    {
+        //full screen, bars on the side so exact pixel values are preserved
+        FULL_SCREEN_ANTI_ALIAS,
+        //full screen with strectching
+        FULL_SCREEN,
+        //windowed, but scaled up.
+        WINDOWED_LARGE,
+        //windowed, no scaling
+        WINDOWED
+    }
+
+    public static Resolution resolution;
+
     public static void setResolution(int baseWidthi, int baseHeighti)
     {
         baseWidth = baseWidthi;
         baseHeight = baseHeighti;
-        configureResolution(false,false);
-
+        configureResolution();
         //force vsync?
         //graphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
     }
 
-    private static void configureResolution(bool fullscreen, bool fullscreenWithAntiAlias)
+    private static void configureResolution()
     {
-        graphicsDeviceManager.IsFullScreen = fullscreen;
+        graphicsDeviceManager.IsFullScreen = (resolution == Resolution.FULL_SCREEN) || (resolution == Resolution.FULL_SCREEN_ANTI_ALIAS);
 
         int resWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
         int resHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-        if (!fullscreen)
+        if (!(graphicsDeviceManager.IsFullScreen))
         {
-            //Simply make the window as big as possible while remaining a multiple. Easy.
-            drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
-            drawScaleY = drawScaleX;
+            //Make the window as big as possible while remaining a multiple. 
+            //BUT: Subtract one, because of that pesky windows bar.
+
+            if (resolution == Resolution.WINDOWED_LARGE)
+            {
+                //find the dimension that is most limiting.
+                int maxScale = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
+                //don't fill the whole screen, only most.
+                drawScaleX = System.Math.Max(maxScale - 1, 1);
+                drawScaleY = drawScaleX;
+            }
+            else
+            {
+                drawScaleX = 1;
+                drawScaleY = 1;
+            }
 
             graphicsDeviceManager.PreferredBackBufferHeight = baseHeight * drawScaleY;
             graphicsDeviceManager.PreferredBackBufferWidth = baseWidth * drawScaleX;
         }
-
-        else if (!fullscreenWithAntiAlias)
+        else if ((resolution == Resolution.FULL_SCREEN))
         {
             //Simply make the window as big as possible while remaining a multiple.
             drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
@@ -67,7 +93,7 @@ public class Renderer
         else
         {
 
-            //full screen, no alias
+            //full screen, anti-alias
             //boy this is gonna be ugly but you asked for it.
             drawScaleY = 1;
             drawScaleX = 1;

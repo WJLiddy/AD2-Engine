@@ -45,10 +45,15 @@ public class SpriteMatrix
     //draw a given frame at a given place with the exact pixel size.
     public void draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y)
     {
-        checkIfValidFrame(xFrame, yFrame);
-        sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, frameWidth, frameHeight), new Rectangle(xFrame * frameWidth, yFrame * frameHeight, frameWidth, frameHeight), Color.White);
+        draw(sb, xFrame, yFrame, x, y, Color.White);
     }
 
+    //draw a given frame at a given place with a tinted color..
+    public void draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y, Color tint)
+    {
+        checkIfValidFrame(xFrame, yFrame);
+        sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, frameWidth, frameHeight), new Rectangle(xFrame * frameWidth, yFrame * frameHeight, frameWidth, frameHeight), tint);
+    }
     public void readParameters(String pathToSheetXML)
     {
         XmlReader reader = XmlReader.Create(pathToSheetXML);

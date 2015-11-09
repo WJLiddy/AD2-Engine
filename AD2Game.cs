@@ -17,6 +17,7 @@ public abstract class AD2Game : Game
     int baseHeight;
     int baseWidth;
 
+
     // Create a game with the passed in resolution and the msPerFrame
     public AD2Game(int baseWidth, int baseHeight, int msPerFrame)
     {

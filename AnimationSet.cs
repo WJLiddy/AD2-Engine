@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections;
 using System.IO;
@@ -87,6 +88,8 @@ public class AnimationSet
         }
     }
 
+    //TODO: colorize these 
+
     //draw the frame, but can be stretched
     public void draw(AD2SpriteBatch sb, int x, int y, int w, int h)
     {
@@ -97,6 +100,12 @@ public class AnimationSet
     public void draw(AD2SpriteBatch sb, int x, int y)
     {
         currentAnimation.draw(sb, xFrame, yFrame, x, y);
+    }
+
+    //draw the frame, no stretching.
+    public void draw(AD2SpriteBatch sb, int x, int y, Color tint)
+    {
+        currentAnimation.draw(sb, xFrame, yFrame, x, y, tint);
     }
 
     //load in aniamation set. TODO: Use utils.XML
