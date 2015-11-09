@@ -48,13 +48,15 @@ public class Renderer
 
     private static void configureResolution()
     {
-        graphicsDeviceManager.IsFullScreen = (resolution == Resolution.FULL_SCREEN) || (resolution == Resolution.FULL_SCREEN_ANTI_ALIAS);
+        bool fullscreen = (resolution == Resolution.FULL_SCREEN) || (resolution == Resolution.FULL_SCREEN_ANTI_ALIAS);
+        graphicsDeviceManager.IsFullScreen = fullscreen;
 
         int resWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
         int resHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-        if (!(graphicsDeviceManager.IsFullScreen))
+        if (!fullscreen)
         {
+            Utils.log("Starting in a window.");
             //Make the window as big as possible while remaining a multiple. 
             //BUT: Subtract one, because of that pesky windows bar.
 
@@ -77,6 +79,7 @@ public class Renderer
         }
         else if ((resolution == Resolution.FULL_SCREEN))
         {
+            Utils.log("Starting fullscreen.");
             //Simply make the window as big as possible while remaining a multiple.
             drawScaleX = System.Math.Min(resHeight / baseHeight, resWidth / baseWidth);
             drawScaleY = drawScaleX;
@@ -92,11 +95,16 @@ public class Renderer
         }
         else
         {
-
+            Utils.log("Starting fullscreen with anti-alias");
             //full screen, anti-alias
-            //boy this is gonna be ugly but you asked for it.
-            drawScaleY = 1;
-            drawScaleX = 1;
+            //boy this is gonna be ugly because of strectching
+            drawScaleX = resWidth / baseWidth;
+            drawScaleY = resHeight / baseHeight;
+
+            //now, we actually do want to set the dimentions correctly.
+            graphicsDeviceManager.PreferredBackBufferHeight = resHeight;
+            graphicsDeviceManager.PreferredBackBufferWidth = resWidth;
+
         }
 
         //now that we know the resolution, make the matrix for it for scaling later.
