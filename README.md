@@ -13,10 +13,9 @@ You might consider using the AD2 engine if:
 - You like using almost exclusively pixel art.
 - You want to run your game at a fixed resolution.
 
-Hopefully by November, we will have the ad2 engine and Castle Spire in their own repos. 
-We may make a couple of tiny games in the ad2 engine to show off how to use it, such as
+We will make a couple of tiny games in the ad2 engine to show off how to use it, such as
 - A Platformer
 - A Flying Game (Done - see WJLIDDY/SkyKid)
-- A Block-Breaker
+- A Block-Breaker (In progress - see CorruptData/Breakout)
 - A Top-Down Shooter
 - A Traditional Roguelike
