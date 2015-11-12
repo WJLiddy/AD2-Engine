@@ -48,9 +48,17 @@ public class Utils
 
     public static Texture2D TextureLoader(String pathToTexture)
     {
-        Stream stream = File.Open(Utils.pathToAssets + pathToTexture, FileMode.Open);
-        Texture2D t =  Texture2D.FromStream(Renderer.graphicsDevice, stream);
-        stream.Close();
+        Texture2D t;
+        try
+        {
+            Stream stream = File.Open(Utils.pathToAssets + pathToTexture, FileMode.Open);
+            t = Texture2D.FromStream(Renderer.graphicsDevice, stream);
+            stream.Close();
+        } catch ( Exception e)
+        {
+            log("Something went wrong when trying to load " + pathToTexture);
+            return whiteRect;
+        }
         return t;
     }
 
@@ -70,6 +78,7 @@ public class Utils
     
     //An expensive operation to find the color blend bewtween two colors.
     //Use sparingly
+    //REDO this. 
     public static Color mix(float minDuration, float position, Color last, Color next)
     {
         float delta = position / minDuration;
@@ -81,7 +90,6 @@ public class Utils
         return new Color(R, G, B, A);
     }
     
-
     public static double dist(int x1, int x2, int y1, int y2)
     {
         return (Math.Sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2))));
@@ -89,10 +97,10 @@ public class Utils
 
     public static void log(String message)
     {
-        System.Console.WriteLine("LOG: " + message);
+        Console.WriteLine("LOG: " + message);
     }
 
-    // Return all elements from an XML, as a hash
+    // Return all elements from an XML, as a linked list hash
     public static Dictionary<string,LinkedList<string>> getXMLEntriesHash(string pathToXML)
     {
         Dictionary<string, LinkedList<string>> allEntries = new Dictionary<string,LinkedList<string>>();

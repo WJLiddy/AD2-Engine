@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
 
 //A SpriteMatrix is basically a Texture2d divided into frames.
 //The intent is that the frames can be called like a matrix for ease of use in animations.
@@ -28,12 +27,16 @@ public class SpriteMatrix
     //When drawing a frame, this is an offset to draw it off by when rendering.
     public int yOffset { get; private set; }
 
+    //the path to the texture representing this sprite.
+    private string spritePath;
+
     //The constructor takes a path to an XML, decodes it, and looks for the png to fetch the actual texture.
     //Pass the XML relative to the assets folder.
     public SpriteMatrix(String pathToXML)
     {
         readParameters(pathToXML);
-        sheet = Utils.TextureLoader(Path.ChangeExtension(pathToXML, ".png"));
+        spritePath = Path.ChangeExtension(pathToXML, ".png");
+        sheet = Utils.TextureLoader(spritePath);
     }
     
     //draw a given frame at a given place at a given size. Allows for streching/resizing
@@ -46,6 +49,7 @@ public class SpriteMatrix
     //draw a given frame at a given place with the exact pixel size.
     public void draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y)
     {
+        //calls color version
         draw(sb, xFrame, yFrame, x, y, Color.White);
     }
 
@@ -55,6 +59,7 @@ public class SpriteMatrix
         checkIfValidFrame(xFrame, yFrame);
         sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, frameWidth, frameHeight), new Rectangle(xFrame * frameWidth, yFrame * frameHeight, frameWidth, frameHeight), tint);
     }
+
     public void readParameters(String pathToSheetXML)
     {
         Dictionary<string,LinkedList<string>> xml = Utils.getXMLEntriesHash(pathToSheetXML);
@@ -79,7 +84,7 @@ public class SpriteMatrix
     void checkIfValidFrame(int xFrame, int yFrame)
     {
         if (xFrame >= frameCountX && yFrame >= frameCountY)
-            Console.Out.WriteLine("WARNING: trying to draw frame not in animation set");
+            Utils.log("Tried to play animation (" + xFrame +"," + yFrame +") which has path " + spritePath);
     }
        
 }

@@ -115,10 +115,4 @@ public class Renderer
 
         graphicsDeviceManager.ApplyChanges();
     }
-
-   //public void drawRect(Color c, int x, int y, int w, int h)
-   // {
-   //     Utils.drawTexture(whiteRect, x, y, w, h, c);
-   // }
-
 }
