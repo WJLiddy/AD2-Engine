@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -56,27 +57,23 @@ public class SpriteMatrix
     }
     public void readParameters(String pathToSheetXML)
     {
-        XmlReader reader = XmlReader.Create(pathToSheetXML);
+        Dictionary<string,LinkedList<string>> xml = Utils.getXMLEntriesHash(pathToSheetXML);
 
-        reader.ReadToFollowing("frameWidth");
-        frameWidth = reader.ReadElementContentAsInt();
+        try
+        {
+            frameWidth = Int32.Parse(xml["frameWidth"].First.Value);
+            frameHeight = Int32.Parse(xml["frameHeight"].First.Value);
+            frameCountX = Int32.Parse(xml["frameCountX"].First.Value);
+            frameCountY = Int32.Parse(xml["frameCountY"].First.Value);
+        } catch ( KeyNotFoundException e)
+        {
+            //We did not find vital spritematrix info.
+            Utils.log("Animation " + pathToSheetXML + " was missing an XML parameter");
+            frameWidth = frameHeight = frameCountX = frameCountY = 1;
+        }
 
-        reader.ReadToFollowing("frameHeight");
-        frameHeight = reader.ReadElementContentAsInt();
-
-        reader.ReadToFollowing("frameCountX");
-        frameCountX = reader.ReadElementContentAsInt();
-
-        reader.ReadToFollowing("frameCountY");
-        frameCountY = reader.ReadElementContentAsInt();
-
-        reader.ReadToFollowing("offsetX");
-        xOffset = reader.ReadElementContentAsInt();
-
-        reader.ReadToFollowing("offsetY");
-        yOffset = reader.ReadElementContentAsInt();
-
-        reader.Close();
+        xOffset = (xml.ContainsKey("offsetX")) ? Int32.Parse(xml["offsetX"].First.Value) : 0;
+        yOffset = (xml.ContainsKey("offsetY")) ? Int32.Parse(xml["offsetY"].First.Value) : 0;
     }
 
     void checkIfValidFrame(int xFrame, int yFrame)

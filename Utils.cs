@@ -96,26 +96,34 @@ public class Utils
     public static Dictionary<string,LinkedList<string>> getXMLEntriesHash(string pathToXML)
     {
         Dictionary<string, LinkedList<string>> allEntries = new Dictionary<string,LinkedList<string>>();
-        XmlReader rdr = XmlReader.Create(Utils.pathToAssets + pathToXML);
-        rdr.Read();
-        while (rdr.Read())
+        try
         { 
-            if (rdr.NodeType == XmlNodeType.Element)
+            XmlReader rdr = XmlReader.Create(Utils.pathToAssets + pathToXML);
+            rdr.Read();
+            while (rdr.Read())
             {
-                string key = rdr.LocalName;
-                string value = rdr.ReadElementContentAsString();
-                if (!allEntries.ContainsKey(key))
+                if (rdr.NodeType == XmlNodeType.Element)
                 {
-                    LinkedList<string> newList = new LinkedList<string>();
-                    newList.AddLast(value);
-                    allEntries.Add(key, newList);
-                } else
-                {
-                    allEntries[key].AddLast(value);
+                    string key = rdr.LocalName;
+                    string value = rdr.ReadElementContentAsString();
+                    if (!allEntries.ContainsKey(key))
+                    {
+                        LinkedList<string> newList = new LinkedList<string>();
+                        newList.AddLast(value);
+                        allEntries.Add(key, newList);
+                    }
+                    else
+                    {
+                        allEntries[key].AddLast(value);
+                    }
                 }
             }
+            rdr.Close();
+        } catch (XmlException e)
+        {
+            Utils.log("Xml File " + pathToXML + " is invalid.");
+            return new Dictionary<string, LinkedList<string>>();
         }
-        rdr.Close();
         return allEntries;
     }
 }
