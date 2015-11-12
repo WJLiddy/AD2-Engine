@@ -1,27 +1,28 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 
-//TODO XMLIZE! read from an XML file that points at a fontsheet and also text.
-
-//ADFont handles usage of an ASCII pixel font.
+// ADFont handles usage of an ASCII pixel font.
 public class PixelFont
 {
-    private Texture2D font;
-    //Height of the font, including spaces.
-    private int height;
-    //widths of an indiviual ASCII character, including post-spacing after character print. 
-    //For example the number "1", a vertical line, has the spacing value of "2".
-    static private int[] widths;
+    // Height of the font, including spaces on the top and bottom.
+    private int Height;
 
-    //Amount of space after each character.
-    private readonly int LETTER_SPACING = 1;
+    // A long strip containing the characters. Ordered by ascii number.
+    private Texture2D Font;
+
+    // Widths of an indiviual ASCII character, including post-spacing after character print. 
+    // For example the number "1", which might be represented as a vertical line, has the spacing value of 2.
+    // You can get the width of any character by passing it as the index of this array. Unsupported characters are '0'
+    static private int[] Widths;
+
+    // Amount of space after each character. One pixel is fine.
+    private readonly int LetterSpacing = 1;
 
     public PixelFont(string pathToFile)
     {
-        font = Utils.TextureLoader(pathToFile);
-        height = 7;
-        widths= defaultSpacing();      
+        loadFontFromXML(pathToFile);
     }
 
     public void draw(SpriteBatch sb, string s, int x, int y, Color col, int scale = 1, bool outline = false){
@@ -38,33 +39,33 @@ public class PixelFont
             //Draws a black underline of the letter.
             if (outline)
             {
-                sb.Draw(font, new Rectangle(x + scale + xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
-                sb.Draw(font, new Rectangle(x + -scale + xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
-                sb.Draw(font, new Rectangle(x + xCursor, y + scale, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
-                sb.Draw(font, new Rectangle(x + xCursor, y - scale , scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), Color.Black);
+                sb.Draw(Font, new Rectangle(x + scale + xCursor, y, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
+                sb.Draw(Font, new Rectangle(x + -scale + xCursor, y, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
+                sb.Draw(Font, new Rectangle(x + xCursor, y + scale, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
+                sb.Draw(Font, new Rectangle(x + xCursor, y - scale , scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
             }
 
             //Draws the actual letter.
-            sb.Draw(font, new Rectangle(x+xCursor, y, scale * widths[value], scale * height), new Rectangle(0, value * height, widths[value], height), col);
+            sb.Draw(Font, new Rectangle(x+xCursor, y, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), col);
 
             //increment the xCursor by the spacing and the widths.
-            xCursor += spaceTakenByCharacter(scale, value, outline);
+            xCursor += SpaceTakenByCharacter(scale, value, outline);
         }
     }
 
     //return width of a given string. 
-    public int getWidth(String s,bool outline)
+    public int GetWidth(String s,bool outline)
     {
         s = s.ToUpper();
         int width = 0;
         foreach (char c in s)
         {
-            width += spaceTakenByCharacter(1, c, outline);
+            width += SpaceTakenByCharacter(1, c, outline);
         }
         return width;
    }
 
-    public static int[] defaultSpacing()
+    public static int[] DefaultSpacing()
     {
         return new int[128]{
             0,0,0,0,0,0,0,0,0,0, //0 - 9
@@ -82,9 +83,17 @@ public class PixelFont
             0,0,0,0,0,0,0,0};
     }
 
-    private int spaceTakenByCharacter(int scale, int value, bool outline)
+    private int SpaceTakenByCharacter(int scale, int value, bool outline)
     {
         //outline takes up two additional pixels
-        return scale * (LETTER_SPACING + widths[value] + (outline ? 2 : 0));
+        return scale * (LetterSpacing + Widths[value] + (outline ? 2 : 0));
+    }
+
+    private void loadFontFromXML(string pathToFile)
+    {
+        Font = Utils.TextureLoader(Path.ChangeExtension(pathToFile,".png"));
+        Height = 7;
+        Widths = DefaultSpacing();
+
     }
 }

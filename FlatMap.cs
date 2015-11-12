@@ -67,8 +67,8 @@ public class FlatMap
         fillCollisionAndWallArray(collisionMap, mapXML.collisionKey, mapXML.wallKey);
         
         //get the roof map.
-        roofs = new RenderTarget2D(Renderer.graphicsDevice, screenWidth, screenHeight);
-        roofBatch = new SpriteBatch(Renderer.graphicsDevice);
+        roofs = new RenderTarget2D(Renderer.GraphicsDevice, screenWidth, screenHeight);
+        roofBatch = new SpriteBatch(Renderer.GraphicsDevice);
 
     }
 
@@ -159,8 +159,8 @@ public class FlatMap
     public void renderRoofs(AD2SpriteBatch sb,Texture2D los, int camX, int camY, int w, int h)
     {
         //clear the roof map to completely opaque
-        Renderer.graphicsDevice.SetRenderTarget(roofs);
-        Renderer.graphicsDevice.Clear(new Color(0, 0, 0, 1f));
+        Renderer.GraphicsDevice.SetRenderTarget(roofs);
+        Renderer.GraphicsDevice.Clear(new Color(0, 0, 0, 1f));
       
         roofBatch.Begin(SpriteSortMode.Deferred, getRoofBlendState(), null, null, null);
 
@@ -169,10 +169,10 @@ public class FlatMap
         roofBatch.Draw(roofMap, new Rectangle(0, 0, w, h), new Rectangle(camX, camY, w, h), Color.White);
 
         roofBatch.End();
-        Renderer.graphicsDevice.SetRenderTarget(null);
+        Renderer.GraphicsDevice.SetRenderTarget(null);
 
         //finally, render to spritebatch.
-        sb.drawTexture(roofs, 0, 0);
+        sb.DrawTexture(roofs, 0, 0);
     }
 
     //renders roofs based on passed-in los array

@@ -6,16 +6,16 @@ using System;
 public abstract class AD2Game : Game
 {
     // Puts our Rendering tools in a globally accessible place
-    protected Renderer renderer;
+    protected Renderer Renderer;
 
     // Spritebatch that gets put on screen
-    private AD2SpriteBatch primarySpriteBatch;
+    private AD2SpriteBatch PrimarySpriteBatch;
 
     // Use this to play sounds and stuff
-    protected SoundManager manager;
+    protected SoundManager Manager;
 
-    int baseHeight;
-    int baseWidth;
+    int BaseHeight;
+    int BaseWidth;
 
 
     // Create a game with the passed in resolution and the msPerFrame
@@ -23,27 +23,25 @@ public abstract class AD2Game : Game
     {
         // Set path to assets
         // TODO: Only works on debug releases
-        Utils.setAssetDirectory(@"..\..\..\assets\");
-        this.baseWidth = baseWidth;
-        this.baseHeight = baseHeight;
+        Utils.SetAssetDirectory(@"..\..\..\assets\");
+        this.BaseWidth = baseWidth;
+        this.BaseHeight = baseHeight;
 
         // Set the games graphics Manager.
-        Renderer.graphicsDeviceManager = new GraphicsDeviceManager(this);
+        Renderer.GraphicsDeviceManager = new GraphicsDeviceManager(this);
 
         // Set up the fixed FPS here.
         IsFixedTimeStep = true;
         TargetElapsedTime = TimeSpan.FromMilliseconds(msPerFrame);
-
-        // Load in utils
     }
 
     // Here we instantiate the Graphics Device, set the screen res, then allow the users to load stuff
     protected override void LoadContent()
     {
-        Renderer.graphicsDevice = Renderer.graphicsDeviceManager.GraphicsDevice;
-        primarySpriteBatch = new AD2SpriteBatch(Renderer.graphicsDevice);
-        Renderer.setResolution(baseWidth, baseHeight);
-        Utils.load();
+        Renderer.GraphicsDevice = Renderer.GraphicsDeviceManager.GraphicsDevice;
+        PrimarySpriteBatch = new AD2SpriteBatch(Renderer.GraphicsDevice);
+        Renderer.setResolution(BaseWidth, BaseHeight);
+        Utils.Load();
         AD2LoadContent();
     }
 
@@ -70,11 +68,11 @@ public abstract class AD2Game : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        Renderer.graphicsDevice.Clear(Color.Black);
+        Renderer.GraphicsDevice.Clear(Color.Black);
 
         //set the spritebatch to start.
-        primarySpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Renderer.matrixScale);
-        AD2Draw(primarySpriteBatch);
-        primarySpriteBatch.End();
+        PrimarySpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Renderer.MatrixScale);
+        AD2Draw(PrimarySpriteBatch);
+        PrimarySpriteBatch.End();
     }
 }

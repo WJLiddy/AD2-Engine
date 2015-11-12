@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
 
 //An AnimationSet is a set of sprite matrix animations that are all mutually exclusive for one character.
-//For example, A village could have an eat sprite matrix, and a walk sprite matrix, never to be drawn at the same time. 
+//For example, A villager could have an eat sprite matrix, and a walk sprite matrix, never to be drawn at the same time. 
 //Each sprite matrix is to represent one animation (such as walk, eat, etc).
 
 //our implemetaion of a single animation is a sprite matrix.ons.
@@ -15,75 +14,74 @@ using System.Xml;
 public class AnimationSet
 {
     //The name of the animation that is defaulted to on load.
-    //TODO Enumize
-    private readonly String DEFAULT_ANIMATION_NAME = "idle";
+    private readonly String DefaultAnimationName = "idle";
 
     //All of the sprite matrixes in this set.
-    private Hashtable animations;
+    private Hashtable Animations;
 
     //ticks until the next frame is triggered. May be changed at any time.
-    public int speed = 1;
+    public int Speed = 1;
 
     //The current sprite matrix being shown.
-    private SpriteMatrix currentAnimation = null;
+    private SpriteMatrix CurrentAnimation = null;
 
     //The current x-frame.
-    private int xFrame = 0;
+    private int XFrame = 0;
     //The current y-frame.
-    private int yFrame = 0;
+    private int YFrame = 0;
 
     //Ticks until next xframe. Remember all animations run left to right.
-    private int ticksLeftToNextFrame = 0;
+    private int TicksLeftToNextFrame = 0;
     //If true, automatically animate on tick. Otherwise, the animation will stay at the x and y frame.
-    private bool animate = false;
+    private bool Animate = false;
 
     //Creates a new animation set relative to assets
     public AnimationSet(String pathToXML)
     {
         //Loads in all the sprite matrix animations, picking the last one to be the default, or the one marked "idle"
-        animations = loadAnimations(pathToXML); 
+        Animations = LoadAnimations(pathToXML); 
 
         //Overrides default if the default animation name is in the set.
-        if (animations[DEFAULT_ANIMATION_NAME] != null)
-            hold(DEFAULT_ANIMATION_NAME, 0, 0);
+        if (Animations[DefaultAnimationName] != null)
+            Hold(DefaultAnimationName, 0, 0);
     }
 
     //freezes to this animation at this x and y frame.
-    public void hold(string anim, int x, int y)
+    public void Hold(string anim, int x, int y)
     {
-        currentAnimation = (SpriteMatrix)animations[anim];
+        CurrentAnimation = (SpriteMatrix)Animations[anim];
         //TODO error handling
-        animate = false;
-        this.xFrame = x;
-        this.yFrame = y;
+        Animate = false;
+        XFrame = x;
+        YFrame = y;
     }
 
     //starts animation. If animation is already in progress, does nothing
-    public void autoAnimate(string anim, int y)
+    public void AutoAnimate(string anim, int y)
     {
         //TODO Error Handling
-        currentAnimation = (SpriteMatrix)animations[anim];
-        this.yFrame = y;
+        CurrentAnimation = (SpriteMatrix)Animations[anim];
+        YFrame = y;
 
-        if (!animate)
+        if (!Animate)
         {
-            ticksLeftToNextFrame = speed;
-            animate = true;
-            xFrame = 0;
+            TicksLeftToNextFrame = Speed;
+            Animate = true;
+            XFrame = 0;
         }
     }
 
     //call on every clock tick.
-    public void update()
+    public void Update()
     {
-        if (animate)
+        if (Animate)
         {
-            ticksLeftToNextFrame--;
+            TicksLeftToNextFrame--;
 
-            if (ticksLeftToNextFrame == 0)
+            if (TicksLeftToNextFrame == 0)
             {
-                xFrame = (xFrame + 1) % currentAnimation.frameCountX;
-                ticksLeftToNextFrame = speed;
+                XFrame = (XFrame + 1) % CurrentAnimation.FrameCountX;
+                TicksLeftToNextFrame = Speed;
             }
         }
     }
@@ -91,25 +89,25 @@ public class AnimationSet
     //TODO: colorize these 
 
     //draw the frame, but can be stretched
-    public void draw(AD2SpriteBatch sb, int x, int y, int w, int h)
+    public void Draw(AD2SpriteBatch sb, int x, int y, int w, int h)
     {
-        currentAnimation.draw(sb, xFrame,yFrame,x,y,w,h);
+        CurrentAnimation.Draw(sb, XFrame,YFrame,x,y,w,h);
     }
 
     //draw the frame, no stretching.
-    public void draw(AD2SpriteBatch sb, int x, int y)
+    public void Draw(AD2SpriteBatch sb, int x, int y)
     {
-        currentAnimation.draw(sb, xFrame, yFrame, x, y);
+        CurrentAnimation.Draw(sb, XFrame, YFrame, x, y);
     }
 
     //draw the frame, no stretching.
-    public void draw(AD2SpriteBatch sb, int x, int y, Color tint)
+    public void Draw(AD2SpriteBatch sb, int x, int y, Color tint)
     {
-        currentAnimation.draw(sb, xFrame, yFrame, x, y, tint);
+        CurrentAnimation.Draw(sb, XFrame, YFrame, x, y, tint);
     }
 
     //load in aniamation set. TODO: Use utils.XML
-    private Hashtable loadAnimations(String pathToXML)
+    private Hashtable LoadAnimations(String pathToXML)
     {
         Hashtable loadedAnimations = new Hashtable();
         XmlReader reader = XmlReader.Create(pathToXML);

@@ -69,8 +69,8 @@ public class ObliqueMap
 
         createObjectMap(objectMapColor, objectMaskColor, pmx.baseKey, pmx.yKey);
 
-        roofs = new RenderTarget2D(Renderer.graphicsDevice, w, h);
-        roofBatch = new SpriteBatch(Renderer.graphicsDevice);
+        roofs = new RenderTarget2D(Renderer.GraphicsDevice, w, h);
+        roofBatch = new SpriteBatch(Renderer.GraphicsDevice);
 
     }
 
@@ -134,11 +134,11 @@ public class ObliqueMap
             allObjects[y] = new MapObjectLine();
             allObjects[y].w = baseMap.Width;
             allObjects[y].h = MAX_OBJECT_HEIGHT;
-            allObjects[y].t = new RenderTarget2D(Renderer.graphicsDevice, baseMap.Width, MAX_OBJECT_HEIGHT);
+            allObjects[y].t = new RenderTarget2D(Renderer.GraphicsDevice, baseMap.Width, MAX_OBJECT_HEIGHT);
 
-            SpriteBatch objRender = new SpriteBatch(Renderer.graphicsDevice);
-            Renderer.graphicsDevice.SetRenderTarget(allObjects[y].t);
-            Renderer.graphicsDevice.Clear(Color.Transparent);
+            SpriteBatch objRender = new SpriteBatch(Renderer.GraphicsDevice);
+            Renderer.GraphicsDevice.SetRenderTarget(allObjects[y].t);
+            Renderer.GraphicsDevice.Clear(Color.Transparent);
 
             objRender.Begin();
             bool drewSomething = false;
@@ -154,7 +154,7 @@ public class ObliqueMap
                         h++;
                     }
 
-                    Texture2D newObject = new Texture2D(Renderer.graphicsDevice, 1, h);
+                    Texture2D newObject = new Texture2D(Renderer.GraphicsDevice, 1, h);
                     Color[] colorData = new Color[h];
 
                     for (int dh = 0; dh != h; dh++)
@@ -251,8 +251,8 @@ public class ObliqueMap
     public void renderRoofs(AD2SpriteBatch sb, Texture2D los, int camX, int camY, int w, int h)
     {
 
-        Renderer.graphicsDevice.SetRenderTarget(roofs);
-        Renderer.graphicsDevice.Clear(new Color(0, 0, 0, 1f));
+        Renderer.GraphicsDevice.SetRenderTarget(roofs);
+        Renderer.GraphicsDevice.Clear(new Color(0, 0, 0, 1f));
 
         BlendState bl = new BlendState();
 
@@ -269,9 +269,9 @@ public class ObliqueMap
         roofBatch.Draw(roofMap, new Rectangle(0, 0, w, h), new Rectangle(camX, camY, w, h), Color.White);
 
         roofBatch.End();
-        Renderer.graphicsDevice.SetRenderTarget(null);
+        Renderer.GraphicsDevice.SetRenderTarget(null);
 
-        sb.drawTexture(roofs, 0, 0);
+        sb.DrawTexture(roofs, 0, 0);
     }
 }
 

@@ -9,77 +9,51 @@ using System.Xml;
 public class Utils
 {
     //Path to your assets folder. Essential for referring to resources by name.
-    public static string pathToAssets;
+    public static string PathToAssets;
 
     //A white rectangle so that drawing rectangles doesn't require loading sprites.
-    private static Texture2D whiteRect;
+    private static Texture2D WhiteRect;
 
     //TODO: Random number generator.
-    public static Random random;
+    public static Random Random;
 
     //A default font for quick writing.
-    public static PixelFont defaultFont { get; private set; }
-
-    public struct Mix
-    {
-        public float delta;
-        public Color last;
-        public Color next;
-
-        public Mix(float d, Color l, Color n)
-        {
-            delta = d;
-            last = l;
-            next = n;
-        }
-
-        public override bool Equals(Object m)
-        {
-            return ((Mix)m).delta == delta &&
-            ((Mix)m).last.Equals(last) &&
-            ((Mix)m).next.Equals(next);
-        }
-
-        public override int GetHashCode()
-        {
-            return ((int)(Int32.MaxValue * delta)/2) + (int)((last.PackedValue / 4)) + (int)((next.PackedValue / 4));
-        }
-    }
+    public static PixelFont DefaultFont { get; private set; }
 
     public static Texture2D TextureLoader(String pathToTexture)
     {
         Texture2D t;
         try
         {
-            Stream stream = File.Open(Utils.pathToAssets + pathToTexture, FileMode.Open);
-            t = Texture2D.FromStream(Renderer.graphicsDevice, stream);
+            Stream stream = File.Open(Utils.PathToAssets + pathToTexture, FileMode.Open);
+            t = Texture2D.FromStream(Renderer.GraphicsDevice, stream);
             stream.Close();
-        } catch ( Exception e)
+        } catch 
         {
-            log("Something went wrong when trying to load " + pathToTexture);
-            return whiteRect;
+            Log("Something went wrong when trying to load " + pathToTexture);
+            return WhiteRect;
         }
         return t;
     }
 
-    public static void setAssetDirectory(string relativePathToAssets)
+    public static void SetAssetDirectory(string relativePathToAssets)
     {
         Directory.SetCurrentDirectory(relativePathToAssets);
-        Utils.pathToAssets = Directory.GetCurrentDirectory() + @"\";
+        Utils.PathToAssets = Directory.GetCurrentDirectory() + @"\";
     }
        
-    public static void load()
+    public static void Load()
     {
-        whiteRect = Utils.TextureLoader(@"..\..\API\assets\rect.png");
-        defaultFont = new PixelFont(@"..\..\API\assets\spireFont.png");
-        SoundManager.load("sounds/");
-        random = new Random();
+        WhiteRect = Utils.TextureLoader(@"..\..\API\assets\rect.png");
+        DefaultFont = new PixelFont(@"..\..\API\assets\spireFont.png");
+        SoundManager.Load("sounds/");
+        Random = new Random();
     }
     
     //An expensive operation to find the color blend bewtween two colors.
     //Use sparingly
     //REDO this. 
-    public static Color mix(float minDuration, float position, Color last, Color next)
+    public static Color Mix(float minDuration, float position, Color last, Color next)
     {
         float delta = position / minDuration;
 
@@ -90,23 +64,23 @@ public class Utils
         return new Color(R, G, B, A);
     }
     
-    public static double dist(int x1, int x2, int y1, int y2)
+    public static double Dist(int x1, int x2, int y1, int y2)
     {
         return (Math.Sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2))));
     }
 
-    public static void log(String message)
+    public static void Log(String message)
     {
         Console.WriteLine("LOG: " + message);
     }
 
     // Return all elements from an XML, as a linked list hash
-    public static Dictionary<string,LinkedList<string>> getXMLEntriesHash(string pathToXML)
+    public static Dictionary<string,LinkedList<string>> GetXMLEntriesHash(string pathToXML)
     {
         Dictionary<string, LinkedList<string>> allEntries = new Dictionary<string,LinkedList<string>>();
         try
         { 
-            XmlReader rdr = XmlReader.Create(Utils.pathToAssets + pathToXML);
+            XmlReader rdr = XmlReader.Create(Utils.PathToAssets + pathToXML);
             rdr.Read();
             while (rdr.Read())
             {
@@ -127,9 +101,9 @@ public class Utils
                 }
             }
             rdr.Close();
-        } catch (XmlException e)
+        } catch (XmlException)
         {
-            Utils.log("Xml File " + pathToXML + " is invalid.");
+            Utils.Log("Xml File " + pathToXML + " is invalid.");
             return new Dictionary<string, LinkedList<string>>();
         }
         return allEntries;

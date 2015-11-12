@@ -5,43 +5,43 @@ using System.IO;
 public class SoundManager
 {
     //A dictionary containing all of the sounds in the directory.
-    public static Dictionary<string, ISoundSource> soundHash;
+    public static Dictionary<string, ISoundSource> SoundHash;
     //A sound engine for our sound needs.
-    public static ISoundEngine engine;
+    public static ISoundEngine Engine;
     //Volume to play all of our sounds at.
-    public static readonly float VOLUME_MAX = .3f;
+    public static readonly float VolumeMax= .3f;
 
-    public static void load(string path)
+    public static void Load(string path)
     {
-        engine = new ISoundEngine();
-        soundHash = getAllSoundFilesFromPath(path);
+        Engine = new ISoundEngine();
+        SoundHash = GetAllSoundFilesFromPath(path);
     }
 
-    public void play(string name,bool looped = false)
+    public void Play(string name,bool looped = false)
     {
-        if (soundHash.ContainsKey(name))
+        if (SoundHash.ContainsKey(name))
         {
-            ISoundSource sound = soundHash[name];
-            sound.DefaultVolume = VOLUME_MAX;
-            engine.Play2D(sound, looped, false, false);
+            ISoundSource sound = SoundHash[name];
+            sound.DefaultVolume = VolumeMax;
+            Engine.Play2D(sound, looped, false, false);
         } else
         {
-            Utils.log("Couldn't play sound: " + name);
+            Utils.Log("Couldn't play sound: " + name);
         }
     }
 
-    public void stop()
+    public void Stop()
     {
-        engine.RemoveAllSoundSources();
+        Engine.RemoveAllSoundSources();
     }
 
-    private static Dictionary<string, ISoundSource> getAllSoundFilesFromPath(string path)
+    private static Dictionary<string, ISoundSource> GetAllSoundFilesFromPath(string path)
     {
         Dictionary<string, ISoundSource> newSoundHash = new Dictionary<string, ISoundSource>();
-        string[] files = Directory.GetFiles(Utils.pathToAssets + path);
+        string[] files = Directory.GetFiles(Utils.PathToAssets + path);
         foreach (string s in files)
         {
-            ISoundSource sound = engine.AddSoundSourceFromFile(s);
+            ISoundSource sound = Engine.AddSoundSourceFromFile(s);
             string id = Path.GetFileName(s);
             newSoundHash.Add(id, sound);
         }

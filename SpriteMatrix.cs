@@ -10,81 +10,81 @@ using System.IO;
 public class SpriteMatrix
 {
     //The sheet itself.
-    private Texture2D sheet;
+    private Texture2D Sheet;
     //The width of a frame.
-    public int frameWidth { get; private set; }
+    public int FrameWidth { get; private set; }
     //The height of a frame.
-    public int frameHeight { get; private set; }
+    public int FrameHeight { get; private set; }
     //How many x-direction frames there are in the animation.
-    public int frameCountX { get; private set; }
+    public int FrameCountX { get; private set; }
     //How many y-direction frames there are in this animation.
-    public int frameCountY { get; private set; }
+    public int FrameCountY { get; private set; }
 
     //When drawing a frame, this is an offset to draw it off by when rendering.
     //In AD2, this refers to the top left corner of someone's sprite. Other isometrics may use this system as well.
     //TODO Convert to OffsetX, Offset Y.
-    public int xOffset{ get; private set; }
+    public int XOffset{ get; private set; }
     //When drawing a frame, this is an offset to draw it off by when rendering.
-    public int yOffset { get; private set; }
+    public int YOffset { get; private set; }
 
     //the path to the texture representing this sprite.
-    private string spritePath;
+    private string SpritePath;
 
     //The constructor takes a path to an XML, decodes it, and looks for the png to fetch the actual texture.
     //Pass the XML relative to the assets folder.
     public SpriteMatrix(String pathToXML)
     {
-        readParameters(pathToXML);
-        spritePath = Path.ChangeExtension(pathToXML, ".png");
-        sheet = Utils.TextureLoader(spritePath);
+        ReadParameters(pathToXML);
+        SpritePath = Path.ChangeExtension(pathToXML, ".png");
+        Sheet = Utils.TextureLoader(SpritePath);
     }
     
     //draw a given frame at a given place at a given size. Allows for streching/resizing
-    public void draw(SpriteBatch sb,int xFrame, int yFrame, int x, int y, int w, int h)
+    public void Draw(SpriteBatch sb,int xFrame, int yFrame, int x, int y, int w, int h)
     {
-        checkIfValidFrame(xFrame, yFrame);
-        sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, w, h), new Rectangle(xFrame*frameWidth, yFrame*frameHeight, frameWidth, frameHeight), Color.White);
+        CheckIfValidFrame(xFrame, yFrame);
+        sb.Draw(Sheet, new Rectangle(x - XOffset, y - YOffset, w, h), new Rectangle(xFrame*FrameWidth, yFrame*FrameHeight, FrameWidth, FrameHeight), Color.White);
     }
 
     //draw a given frame at a given place with the exact pixel size.
-    public void draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y)
+    public void Draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y)
     {
         //calls color version
-        draw(sb, xFrame, yFrame, x, y, Color.White);
+        Draw(sb, xFrame, yFrame, x, y, Color.White);
     }
 
     //draw a given frame at a given place with a tinted color..
-    public void draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y, Color tint)
+    public void Draw(SpriteBatch sb, int xFrame, int yFrame, int x, int y, Color tint)
     {
-        checkIfValidFrame(xFrame, yFrame);
-        sb.Draw(sheet, new Rectangle(x - xOffset, y - yOffset, frameWidth, frameHeight), new Rectangle(xFrame * frameWidth, yFrame * frameHeight, frameWidth, frameHeight), tint);
+        CheckIfValidFrame(xFrame, yFrame);
+        sb.Draw(Sheet, new Rectangle(x - XOffset, y - YOffset, FrameWidth, FrameHeight), new Rectangle(xFrame * FrameWidth, yFrame * FrameHeight, FrameWidth, FrameHeight), tint);
     }
 
-    public void readParameters(String pathToSheetXML)
+    public void ReadParameters(String pathToSheetXML)
     {
-        Dictionary<string,LinkedList<string>> xml = Utils.getXMLEntriesHash(pathToSheetXML);
+        Dictionary<string,LinkedList<string>> xml = Utils.GetXMLEntriesHash(pathToSheetXML);
 
         try
         {
-            frameWidth = Int32.Parse(xml["frameWidth"].First.Value);
-            frameHeight = Int32.Parse(xml["frameHeight"].First.Value);
-            frameCountX = Int32.Parse(xml["frameCountX"].First.Value);
-            frameCountY = Int32.Parse(xml["frameCountY"].First.Value);
+            FrameWidth = Int32.Parse(xml["frameWidth"].First.Value);
+            FrameHeight = Int32.Parse(xml["frameHeight"].First.Value);
+            FrameCountX = Int32.Parse(xml["frameCountX"].First.Value);
+            FrameCountY = Int32.Parse(xml["frameCountY"].First.Value);
         } catch ( KeyNotFoundException e)
         {
             //We did not find vital spritematrix info.
-            Utils.log("Animation " + pathToSheetXML + " was missing an XML parameter");
-            frameWidth = frameHeight = frameCountX = frameCountY = 1;
+            Utils.Log("Animation " + pathToSheetXML + " was missing an XML parameter");
+            FrameWidth = FrameHeight = FrameCountX = FrameCountY = 1;
         }
 
-        xOffset = (xml.ContainsKey("offsetX")) ? Int32.Parse(xml["offsetX"].First.Value) : 0;
-        yOffset = (xml.ContainsKey("offsetY")) ? Int32.Parse(xml["offsetY"].First.Value) : 0;
+        XOffset = (xml.ContainsKey("offsetX")) ? Int32.Parse(xml["offsetX"].First.Value) : 0;
+        YOffset = (xml.ContainsKey("offsetY")) ? Int32.Parse(xml["offsetY"].First.Value) : 0;
     }
 
-    void checkIfValidFrame(int xFrame, int yFrame)
+    void CheckIfValidFrame(int xFrame, int yFrame)
     {
-        if (xFrame >= frameCountX && yFrame >= frameCountY)
-            Utils.log("Tried to play animation (" + xFrame +"," + yFrame +") which has path " + spritePath);
+        if (xFrame >= FrameCountX && yFrame >= FrameCountY)
+            Utils.Log("Tried to play animation (" + xFrame +"," + yFrame +") which has path " + SpritePath);
     }
        
 }
