@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml;
 
 //A Map contains 
-public class Map
+public class ObliqueMap
 {
     Texture2D baseMap;
     Texture2D alwaysMap;
@@ -43,7 +43,7 @@ public class Map
 
     MapObjectLine[] allObjects;
 
-    public Map(string pathToMap, int w, int h)
+    public ObliqueMap(string pathToMap, int w, int h)
     {
         ParsedMapXML pmx  = readMapXML(pathToMap);
 

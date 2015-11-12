@@ -93,10 +93,9 @@ public class Utils
     }
 
     // Return all elements from an XML, as a hash
-    // LOL we dont use this yet TODO
-    public static Dictionary<string,string> getXMLEntriesHash(string pathToXML)
+    public static Dictionary<string,LinkedList<string>> getXMLEntriesHash(string pathToXML)
     {
-        Dictionary<string, string> allEntries = new Dictionary<string,string>();
+        Dictionary<string, LinkedList<string>> allEntries = new Dictionary<string,LinkedList<string>>();
         XmlReader rdr = XmlReader.Create(Utils.pathToAssets + pathToXML);
         rdr.Read();
         while (rdr.Read())
@@ -105,7 +104,15 @@ public class Utils
             {
                 string key = rdr.LocalName;
                 string value = rdr.ReadElementContentAsString();
-                allEntries.Add(key, value);
+                if (!allEntries.ContainsKey(key))
+                {
+                    LinkedList<string> newList = new LinkedList<string>();
+                    newList.AddLast(value);
+                    allEntries.Add(key, newList);
+                } else
+                {
+                    allEntries[key].AddLast(value);
+                }
             }
         }
         rdr.Close();
