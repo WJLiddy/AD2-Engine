@@ -5,21 +5,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-//A collection of utility methods and variables for the AD2 Engine.
+//A collection of static utility methods and variables for the AD2 Engine.
 public class Utils
 {
-    //Path to your assets folder. Essential for referring to resources by name.
-    public static string PathToAssets;
+    //Path to the assets folder. Essential for referring to resources by name.
+    public static string PathToAssets { get; private set; }
+
+    //A default tiny font for writing.
+    public static PixelFont DefaultFont { get; private set; }
+
+    //Random number generator.
+    private static Random Random;
 
     //A white rectangle so that drawing rectangles doesn't require loading sprites.
     private static Texture2D WhiteRect;
 
-    //TODO: Random number generator.
-    public static Random Random;
-
-    //A default font for quick writing.
-    public static PixelFont DefaultFont { get; private set; }
-
+    //Loads a texture specified on the "assets/" folder in every ad2 engine game.
     public static Texture2D TextureLoader(String pathToTexture)
     {
         Texture2D t;
@@ -36,39 +37,40 @@ public class Utils
         return t;
     }
 
+    //Set the path to the game assets. By default, this is "assets/", but you can change it.
     public static void SetAssetDirectory(string relativePathToAssets)
     {
         Directory.SetCurrentDirectory(relativePathToAssets);
         Utils.PathToAssets = Directory.GetCurrentDirectory() + @"\";
     }
        
+    //Loads a basic rectangle, some text, some sounds. And a RNG.
     public static void Load()
     {
         WhiteRect = Utils.TextureLoader(@"..\..\API\assets\rect.png");
-        DefaultFont = new PixelFont(@"..\..\API\assets\spireFont.png");
+        DefaultFont = new PixelFont(@"..\..\API\assets\spireFont.xml");
         SoundManager.Load("sounds/");
-        Random = new Random();
+        Random = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
     }
     
     //An expensive operation to find the color blend bewtween two colors.
     //Use sparingly
-    //REDO this. 
-    public static Color Mix(float minDuration, float position, Color last, Color next)
+    public static Color Mix(float percentFirst, Color first, Color second)
     {
-        float delta = position / minDuration;
-
-        float R = ((last.R / 255f) * (1f - delta)) + (delta * (next.R / 255f));
-        float G = ((last.G / 255f) * (1f - delta)) + (delta * (next.G / 255f));
-        float B = ((last.B / 255f) * (1f - delta)) + (delta * (next.B / 255f));
-        float A = ((last.A / 255f) * (1f - delta)) + (delta * (next.A / 255f));
+        float R = ((second.R / 255f) * (1f - percentFirst)) + (percentFirst * (first.R / 255f));
+        float G = ((second.G / 255f) * (1f - percentFirst)) + (percentFirst * (first.G / 255f));
+        float B = ((second.B / 255f) * (1f - percentFirst)) + (percentFirst * (first.B / 255f));
+        float A = ((second.A / 255f) * (1f - percentFirst)) + (percentFirst * (first.A / 255f));
         return new Color(R, G, B, A);
     }
     
+    //Distance between two integers
     public static double Dist(int x1, int x2, int y1, int y2)
     {
         return (Math.Sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2))));
     }
 
+    //Log errors.
     public static void Log(String message)
     {
         Console.WriteLine("LOG: " + message);
@@ -107,6 +109,12 @@ public class Utils
             return new Dictionary<string, LinkedList<string>>();
         }
         return allEntries;
+    }
+
+    //return random number, 0 through 1.
+    public static double randomNumber()
+    {
+        return Random.NextDouble();
     }
 }
 

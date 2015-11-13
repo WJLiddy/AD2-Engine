@@ -11,12 +11,14 @@ public class SoundManager
     //Volume to play all of our sounds at.
     public static readonly float VolumeMax= .3f;
 
+    //Load sound from path, relative to PathToAssets.
     public static void Load(string path)
     {
         Engine = new ISoundEngine();
         SoundHash = GetAllSoundFilesFromPath(path);
     }
 
+    //Play a sound.
     public void Play(string name,bool looped = false)
     {
         if (SoundHash.ContainsKey(name))
@@ -30,11 +32,13 @@ public class SoundManager
         }
     }
 
+    //Stop all Sounds.
     public void Stop()
     {
         Engine.RemoveAllSoundSources();
     }
 
+    //Generate all sounds from a file.
     private static Dictionary<string, ISoundSource> GetAllSoundFilesFromPath(string path)
     {
         Dictionary<string, ISoundSource> newSoundHash = new Dictionary<string, ISoundSource>();

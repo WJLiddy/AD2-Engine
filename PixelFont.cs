@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 // ADFont handles usage of an ASCII pixel font.
@@ -14,7 +15,7 @@ public class PixelFont
 
     // Widths of an indiviual ASCII character, including post-spacing after character print. 
     // For example the number "1", which might be represented as a vertical line, has the spacing value of 2.
-    // You can get the width of any character by passing it as the index of this array. Unsupported characters are '0'
+    // You can get the width of any character by passing it as the index of this array. Unsupported characters are '0'.
     static private int[] Widths;
 
     // Amount of space after each character. One pixel is fine.
@@ -65,24 +66,6 @@ public class PixelFont
         return width;
    }
 
-    public static int[] DefaultSpacing()
-    {
-        return new int[128]{
-            0,0,0,0,0,0,0,0,0,0, //0 - 9
-            0,0,0,0,0,0,0,0,0,0, //10 - 9
-            0,0,0,0,0,0,0,0,0,0, //20 - 9
-            0,0,2,0,0,0,0,0,0,0, //30 - 9
-            0,0,0,0,0,0,0,0,3,2, //40 - 9
-            3,3,3,3,3,3,3,3,1,0, //50 - 9
-            0,0,0,0,0,3,3,3,3,2, //60 - 9
-            2,3,3,3,4,3,3,5,3,3, //70 - 9
-            3,4,3,3,3,3,3,5,3,3, //80 - 9
-            3,0,0,0,0,0,0,0,0,0, //90 - 9
-            0,0,0,0,0,0,0,0,0,0, //100 - 9
-            0,0,0,0,0,0,0,0,0,0, //110 - 9
-            0,0,0,0,0,0,0,0};
-    }
-
     private int SpaceTakenByCharacter(int scale, int value, bool outline)
     {
         //outline takes up two additional pixels
@@ -91,9 +74,30 @@ public class PixelFont
 
     private void loadFontFromXML(string pathToFile)
     {
-        Font = Utils.TextureLoader(Path.ChangeExtension(pathToFile,".png"));
-        Height = 7;
-        Widths = DefaultSpacing();
+        //read the associated xml for the font. Fetch all the letter spacings.
+        //Require: Height, and Space.
+        //Then the ascii codes 33 to 126.
+        Widths = new int[128];
+        Dictionary<string, LinkedList<string>> fontdata = Utils.GetXMLEntriesHash(pathToFile);
+        for (int i = 33; i != 127; i++)
+        {
+            string character = ((char)i).ToString();
 
+            if (fontdata.ContainsKey("_"+character))
+                Widths[i] = Int32.Parse(fontdata["_"+character].First.Value);
+        }
+
+        //fetch the font.
+        Font = Utils.TextureLoader(Path.ChangeExtension(pathToFile,".png"));
+
+        if (!fontdata.ContainsKey("height") || !fontdata.ContainsKey("space"))
+        {
+            Height = 1;
+            Utils.Log("Error in XML while loading font " + pathToFile);
+        } else
+        {
+            Height = Int32.Parse(fontdata["height"].First.Value);
+            Widths[' '] = Int32.Parse(fontdata["space"].First.Value);
+        }
     }
 }

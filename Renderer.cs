@@ -11,16 +11,10 @@ public class Renderer
     public static GraphicsDevice GraphicsDevice;
 
     //The streching we do to fill the screen with the game.
-    //TODO: private?
     public static Matrix MatrixScale;
 
-    //Draw parameters
-    public static int DrawScaleX = 1;
-    public static int DrawScaleY = 1;
-    public static int DrawXOff = 0;
-    public static int DrawYOff = 0;
-    public static int BaseHeight = 0;
-    public static int BaseWidth = 0;
+    private static int BaseHeight = 0;
+    private static int BaseWidth = 0;
 
     //some basic resolution options
    public enum ResolutionType
@@ -35,7 +29,7 @@ public class Renderer
         Windowed
     }
 
-    public static ResolutionType Resolution;
+    public static ResolutionType Resolution = ResolutionType.Windowed;
 
     public static void setResolution(int baseWidthi, int baseHeighti)
     {
@@ -48,6 +42,12 @@ public class Renderer
 
     private static void ConfigureResolution()
     {
+
+        int drawScaleX = 1;
+        int drawScaleY = 1;
+        int drawXOff = 0;
+        int drawYOff = 0;
+
         bool fullscreen = (Resolution == ResolutionType.FullScreen) || (Resolution == ResolutionType.FullScreenAntiAlias);
         GraphicsDeviceManager.IsFullScreen = fullscreen;
 
@@ -65,32 +65,32 @@ public class Renderer
                 //find the dimension that is most limiting.
                 int maxScale = System.Math.Min(resHeight / BaseHeight, resWidth / BaseWidth);
                 //don't fill the whole screen, only most.
-                DrawScaleX = System.Math.Max(maxScale - 1, 1);
-                DrawScaleY = DrawScaleX;
+                drawScaleX = System.Math.Max(maxScale - 1, 1);
+                drawScaleY = drawScaleX;
             }
             else
             {
-                DrawScaleX = 1;
-                DrawScaleY = 1;
+                drawScaleX = 1;
+                drawScaleY = 1;
             }
 
-            GraphicsDeviceManager.PreferredBackBufferHeight = BaseHeight * DrawScaleY;
-            GraphicsDeviceManager.PreferredBackBufferWidth = BaseWidth * DrawScaleX;
+            GraphicsDeviceManager.PreferredBackBufferHeight = BaseHeight * drawScaleY;
+            GraphicsDeviceManager.PreferredBackBufferWidth = BaseWidth * drawScaleX;
         }
         else if ((Resolution == ResolutionType.FullScreen))
         {
             Utils.Log("Starting fullscreen.");
             //Simply make the window as big as possible while remaining a multiple.
-            DrawScaleX = System.Math.Min(resHeight / BaseHeight, resWidth / BaseWidth);
-            DrawScaleY = DrawScaleX;
+            drawScaleX = System.Math.Min(resHeight / BaseHeight, resWidth / BaseWidth);
+            drawScaleY = drawScaleX;
 
             //now, we actually do want to set the dimentions correctly.
             GraphicsDeviceManager.PreferredBackBufferHeight = resHeight;
             GraphicsDeviceManager.PreferredBackBufferWidth = resWidth;
 
             //now, find offsets.
-            DrawXOff = (resWidth - (BaseWidth * DrawScaleY)) / 2;
-            DrawYOff = (resHeight - (BaseHeight * DrawScaleX)) / 2;
+            drawXOff = (resWidth - (BaseWidth * drawScaleY)) / 2;
+            drawYOff = (resHeight - (BaseHeight * drawScaleX)) / 2;
 
         }
         else
@@ -98,8 +98,8 @@ public class Renderer
             Utils.Log("Starting fullscreen with anti-alias");
             //full screen, anti-alias
             //boy this is gonna be ugly because of strectching
-            DrawScaleX = resWidth / BaseWidth;
-            DrawScaleY = resHeight / BaseHeight;
+            drawScaleX = resWidth / BaseWidth;
+            drawScaleY = resHeight / BaseHeight;
 
             //now, we actually do want to set the dimentions correctly.
             GraphicsDeviceManager.PreferredBackBufferHeight = resHeight;
@@ -109,9 +109,9 @@ public class Renderer
 
         //now that we know the resolution, make the matrix for it for scaling later.
         MatrixScale = Matrix.Identity;
-        MatrixScale.M11 = DrawScaleX;
-        MatrixScale.M22 = DrawScaleY;
-        MatrixScale.Translation = new Vector3(DrawXOff, DrawYOff, 0);
+        MatrixScale.M11 = drawScaleX;
+        MatrixScale.M22 = drawScaleY;
+        MatrixScale.Translation = new Vector3(drawXOff, drawYOff, 0);
 
         GraphicsDeviceManager.ApplyChanges();
     }

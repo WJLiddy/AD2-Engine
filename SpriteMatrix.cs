@@ -70,7 +70,7 @@ public class SpriteMatrix
             FrameHeight = Int32.Parse(xml["frameHeight"].First.Value);
             FrameCountX = Int32.Parse(xml["frameCountX"].First.Value);
             FrameCountY = Int32.Parse(xml["frameCountY"].First.Value);
-        } catch ( KeyNotFoundException e)
+        } catch ( KeyNotFoundException)
         {
             //We did not find vital spritematrix info.
             Utils.Log("Animation " + pathToSheetXML + " was missing an XML parameter");

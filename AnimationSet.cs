@@ -10,7 +10,7 @@ using System.Xml;
 
 //our implemetaion of a single animation is a sprite matrix.ons.
 
-//TODO play once finction
+//TODO play once animations
 public class AnimationSet
 {
     //The name of the animation that is defaulted to on load.
@@ -86,7 +86,6 @@ public class AnimationSet
         }
     }
 
-    //TODO: colorize these 
 
     //draw the frame, but can be stretched
     public void Draw(AD2SpriteBatch sb, int x, int y, int w, int h)
