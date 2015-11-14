@@ -1,20 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
-using System.Xml;
 
 //An AnimationSet is a set of sprite matrix animations that are all mutually exclusive for one character.
 //For example, A villager could have an eat sprite matrix, and a walk sprite matrix, never to be drawn at the same time. 
 //Each sprite matrix is to represent one animation (such as walk, eat, etc).
 
-//our implemetaion of a single animation is a sprite matrix.ons.
-
-//TODO play once animations
+//our implemetaion of a single animation is a sprite matrix.
 public class AnimationSet
 {
+    private string AnimationPath;
+
     //All of the sprite matrixes in this set.
-    private Hashtable Animations;
+    private Dictionary<string, SpriteMatrix> Animations;
 
     //Speed of an animation. May be changed at any time.
     public int Speed = 1;
@@ -44,8 +43,12 @@ public class AnimationSet
     //freezes to this animation at this x and y frame.
     public void Hold(string anim, int x, int y)
     {
-        CurrentAnimation = (SpriteMatrix)Animations[anim];
-        //TODO error handling
+        if(!Animations.ContainsKey(anim))
+        {
+            Utils.Log("Tried to hold animation " + anim + " from " + AnimationPath + " but failed because animation did not exist");
+            return;
+        }
+        CurrentAnimation = Animations[anim];
         Animate = false;
         XFrame = x;
         YFrame = y;
@@ -54,8 +57,12 @@ public class AnimationSet
     //starts looping animation. If animation is already in progress, does nothing
     public void AutoAnimate(string anim, int y)
     {
-        //TODO Error Handling
-        CurrentAnimation = (SpriteMatrix)Animations[anim];
+        if (!Animations.ContainsKey(anim))
+        {
+            Utils.Log("Tried to animate animation " + anim + " from " + AnimationPath + " but failed because animation did not exist");
+            return;
+        }
+        CurrentAnimation = Animations[anim];
         YFrame = y;
         XFrame = 0;
         TicksLeftToNextFrame = Speed;
@@ -109,22 +116,22 @@ public class AnimationSet
         CurrentAnimation.Draw(sb, XFrame, YFrame, x, y, tint);
     }
 
-    //load in aniamation set. TODO: Use utils.XML
-    private Hashtable LoadAnimations(String pathToXML)
+    //load in animation set
+    private Dictionary<string, SpriteMatrix> LoadAnimations(String pathToXML)
     {
-        Hashtable loadedAnimations = new Hashtable();
-        XmlReader reader = XmlReader.Create(pathToXML);
-        //load each Animation.
-        reader.ReadToFollowing("Animation");
-        while (!reader.EOF)
-        {
-            String animationName = reader.ReadElementContentAsString();
-            //add the animation to the hash, using the name.
-            loadedAnimations.Add(animationName, new SpriteMatrix(Path.GetDirectoryName(pathToXML) + @"\" + animationName + ".xml"));
-            //order the animation to hold at this animation's 0,0.
-            reader.ReadToFollowing("Animation");
+        AnimationPath = pathToXML;
+        Dictionary<string, SpriteMatrix> loadedAnimations = new Dictionary<string, SpriteMatrix>();
+        Dictionary<string, LinkedList<string>> animXML = Utils.GetXMLEntriesHash(pathToXML);
+        if (!animXML.ContainsKey("Animation"))
+        { 
+            Utils.Log("Animation " + pathToXML + " does not have any Animation elements");
+            return loadedAnimations;
         }
-        reader.Close();
+
+        foreach(string animationName in animXML["Animation"])
+        { 
+            loadedAnimations.Add(animationName, new SpriteMatrix(Path.GetDirectoryName(pathToXML) + @"\" + animationName + ".xml"));
+        }
         return loadedAnimations;
     }
 }
