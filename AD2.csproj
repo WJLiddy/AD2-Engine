@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="AD2SpriteBatch.cs" />
     <Compile Include="AD2Game.cs" />
-    <Compile Include="FlatMap.cs" />
+    <Compile Include="CollisionMap.cs" />
     <Compile Include="PixelFont.cs" />
     <Compile Include="AnimationSet.cs" />
     <Compile Include="Renderer.cs" />
