@@ -13,22 +13,20 @@ public class PixelFont
     // A long strip containing the characters. Ordered by ascii number.
     private Texture2D Font;
 
-    // Widths of an indiviual ASCII character, including post-spacing after character print. 
-    // For example the number "1", which might be represented as a vertical line, has the spacing value of 2.
+    // Widths of an indiviual ASCII character.
+    // For example the number "1", which might be represented as a vertical line plus one pixel to the left, has the spacing value of 2.
     // You can get the width of any character by passing it as the index of this array. Unsupported characters are '0'.
     static private int[] Widths;
 
-    // Amount of space after each character. One pixel is fine.
-    private readonly int LetterSpacing = 1;
+    // Amount of space after each character.
+    private int SpaceBetweenLetters;
 
     public PixelFont(string pathToFile)
     {
-        loadFontFromXML(pathToFile);
+        LoadFontFromXML(pathToFile);
     }
 
-    public void draw(SpriteBatch sb, string s, int x, int y, Color col, int scale = 1, bool outline = false){
-        //Support upcase to get correct character codes.
-        s = s.ToUpper();
+    public void Draw(SpriteBatch sb, string s, int x, int y, Color col, int scale = 1, bool outline = false){
 
         //where we are putting the next letter relaive to the x
         int xCursor = 0; 
@@ -57,7 +55,6 @@ public class PixelFont
     //return width of a given string. 
     public int GetWidth(String s,bool outline)
     {
-        s = s.ToUpper();
         int width = 0;
         foreach (char c in s)
         {
@@ -68,11 +65,11 @@ public class PixelFont
 
     private int SpaceTakenByCharacter(int scale, int value, bool outline)
     {
-        //outline takes up two additional pixels
-        return scale * (LetterSpacing + Widths[value] + (outline ? 2 : 0));
+        //outline takes up two additional pixels.
+        return scale * (SpaceBetweenLetters + Widths[value] + (outline ? 2 : 0));
     }
 
-    private void loadFontFromXML(string pathToFile)
+    private void LoadFontFromXML(string pathToFile)
     {
         //read the associated xml for the font. Fetch all the letter spacings.
         //Require: Height, and Space.
@@ -90,7 +87,7 @@ public class PixelFont
         //fetch the font.
         Font = Utils.TextureLoader(Path.ChangeExtension(pathToFile,".png"));
 
-        if (!fontdata.ContainsKey("height") || !fontdata.ContainsKey("space"))
+        if (!fontdata.ContainsKey("height") || !fontdata.ContainsKey("space") || !fontdata.ContainsKey("spaceBetweenLetters"))
         {
             Height = 1;
             Utils.Log("Error in XML while loading font " + pathToFile);
@@ -98,6 +95,7 @@ public class PixelFont
         {
             Height = Int32.Parse(fontdata["height"].First.Value);
             Widths[' '] = Int32.Parse(fontdata["space"].First.Value);
+            SpaceBetweenLetters = Int32.Parse(fontdata["spaceBetweenLetters"].First.Value);
         }
     }
 }

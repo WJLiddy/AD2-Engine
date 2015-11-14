@@ -1,7 +1,9 @@
 <FONT>
-	<space>2</space>
 	<height>7</height>
+	<spaceBetweenLetters>1</spaceBetweenLetters>
 	
+	<space>2</space>
+		
 	<_0>3</_0>
 	<_1>2</_1>
 	<_2>3</_2>

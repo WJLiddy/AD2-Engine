@@ -13,13 +13,10 @@ using System.Xml;
 //TODO play once animations
 public class AnimationSet
 {
-    //The name of the animation that is defaulted to on load.
-    private readonly String DefaultAnimationName = "idle";
-
     //All of the sprite matrixes in this set.
     private Hashtable Animations;
 
-    //ticks until the next frame is triggered. May be changed at any time.
+    //Speed of an animation. May be changed at any time.
     public int Speed = 1;
 
     //The current sprite matrix being shown.
@@ -34,16 +31,14 @@ public class AnimationSet
     private int TicksLeftToNextFrame = 0;
     //If true, automatically animate on tick. Otherwise, the animation will stay at the x and y frame.
     private bool Animate = false;
+    //If true, once the animation reaches it's end, then it will simply stop.
+    private bool AnimateOnce = false;
 
     //Creates a new animation set relative to assets
     public AnimationSet(String pathToXML)
     {
-        //Loads in all the sprite matrix animations, picking the last one to be the default, or the one marked "idle"
+        //Loads in all the sprite matrix animations, picking the last one to be the current Animation.
         Animations = LoadAnimations(pathToXML); 
-
-        //Overrides default if the default animation name is in the set.
-        if (Animations[DefaultAnimationName] != null)
-            Hold(DefaultAnimationName, 0, 0);
     }
 
     //freezes to this animation at this x and y frame.
@@ -56,19 +51,22 @@ public class AnimationSet
         YFrame = y;
     }
 
-    //starts animation. If animation is already in progress, does nothing
+    //starts looping animation. If animation is already in progress, does nothing
     public void AutoAnimate(string anim, int y)
     {
         //TODO Error Handling
         CurrentAnimation = (SpriteMatrix)Animations[anim];
         YFrame = y;
+        XFrame = 0;
+        TicksLeftToNextFrame = Speed;
+        Animate = true;
+        XFrame = 0;
+    }
 
-        if (!Animate)
-        {
-            TicksLeftToNextFrame = Speed;
-            Animate = true;
-            XFrame = 0;
-        }
+    public void AutoAnimateOnce(string anim, int y)
+    {
+        AutoAnimate(anim, y);
+        AnimateOnce = true;
     }
 
     //call on every clock tick.
@@ -80,12 +78,18 @@ public class AnimationSet
 
             if (TicksLeftToNextFrame == 0)
             {
+                //If we are on the last animation, simply stop playing it.
+                //Off by one: XFrame indexes to zero.
+                if (AnimateOnce && XFrame == (CurrentAnimation.FrameCountX - 1))
+                {
+                    return;
+                }
+
                 XFrame = (XFrame + 1) % CurrentAnimation.FrameCountX;
                 TicksLeftToNextFrame = Speed;
             }
         }
     }
-
 
     //draw the frame, but can be stretched
     public void Draw(AD2SpriteBatch sb, int x, int y, int w, int h)
