@@ -248,31 +248,7 @@ public class ObliqueMap
         }
     }
 
-    public void renderRoofs(AD2SpriteBatch sb, Texture2D los, int camX, int camY, int w, int h)
-    {
 
-        Renderer.GraphicsDevice.SetRenderTarget(roofs);
-        Renderer.GraphicsDevice.Clear(new Color(0, 0, 0, 1f));
-
-        BlendState bl = new BlendState();
-
-        //Once I am zero, i stay zero.
-        bl.AlphaDestinationBlend = Blend.Zero;
-        bl.AlphaSourceBlend = Blend.DestinationAlpha; 
-
-        bl.ColorSourceBlend = Blend.DestinationAlpha;
-        bl.ColorDestinationBlend = Blend.Zero;
-
-        roofBatch.Begin(SpriteSortMode.Deferred, bl, null, null, null);
-
-        roofBatch.Draw(los, new Rectangle(0, 0, w, h), new Rectangle(0, 0, w, h), Color.White);
-        roofBatch.Draw(roofMap, new Rectangle(0, 0, w, h), new Rectangle(camX, camY, w, h), Color.White);
-
-        roofBatch.End();
-        Renderer.GraphicsDevice.SetRenderTarget(null);
-
-        sb.DrawTexture(roofs, 0, 0);
-    }
 }
 
 

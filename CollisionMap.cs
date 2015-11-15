@@ -25,6 +25,8 @@ public class CollisionMap
     private int ScreenWidth;
     private int ScreenHeight;
 
+    protected Texture2D CollisionMaskMap;
+
   
     public CollisionMap(string pathToMapXML, int screenWidth, int screenHeight)
     {
@@ -33,14 +35,13 @@ public class CollisionMap
         Dictionary<string, LinkedList<string>> mapXML = Utils.GetXMLEntriesHash(pathToMapXML);
 
         // load in the two imporant layers. Also, collision data.
-        Texture2D collisionMap;
         Color collisionKey;
         try
         {
             // load the texture of the "base" element.
             BaseMap = Utils.TextureLoader(Path.GetDirectoryName(pathToMapXML) + @"\" + mapXML["base"].First.Value);
             // load the texture of the "collision" element.
-            collisionMap = Utils.TextureLoader(Path.GetDirectoryName(pathToMapXML) + @"\" + mapXML["collision"].First.Value);
+            CollisionMaskMap = Utils.TextureLoader(Path.GetDirectoryName(pathToMapXML) + @"\" + mapXML["collision"].First.Value);
             // load in the color key.
             collisionKey = new Color(Int32.Parse(mapXML["collisionKeyR"].First.Value), Int32.Parse(mapXML["collisionKeyG"].First.Value), Int32.Parse(mapXML["collisionKeyB"].First.Value));
         }
@@ -56,7 +57,7 @@ public class CollisionMap
         }
         
         //fill the boolean array for colissions and walls.
-        Collision = getCollisionArray(collisionMap, collisionKey);
+        Collision = getCollisionArray(CollisionMaskMap, collisionKey);
     }
 
     public void drawBase(AD2SpriteBatch sb, int x, int y)
