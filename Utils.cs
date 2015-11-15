@@ -103,9 +103,9 @@ public class Utils
                 }
             }
             rdr.Close();
-        } catch (XmlException)
+        } catch
         {
-            Utils.Log("Xml File " + pathToXML + " is invalid.");
+            Log("Xml File " + pathToXML + " is invalid.");
             return new Dictionary<string, LinkedList<string>>();
         }
         return allEntries;

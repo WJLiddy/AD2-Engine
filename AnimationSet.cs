@@ -101,19 +101,22 @@ public class AnimationSet
     //draw the frame, but can be stretched
     public void Draw(AD2SpriteBatch sb, int x, int y, int w, int h)
     {
-        CurrentAnimation.Draw(sb, XFrame,YFrame,x,y,w,h);
+        if (CurrentAnimation != null)
+            CurrentAnimation.Draw(sb, XFrame, YFrame, x, y, w, h);
     }
 
     //draw the frame, no stretching.
     public void Draw(AD2SpriteBatch sb, int x, int y)
     {
-        CurrentAnimation.Draw(sb, XFrame, YFrame, x, y);
+        if (CurrentAnimation != null)
+            CurrentAnimation.Draw(sb, XFrame, YFrame, x, y);
     }
 
     //draw the frame, no stretching.
     public void Draw(AD2SpriteBatch sb, int x, int y, Color tint)
     {
-        CurrentAnimation.Draw(sb, XFrame, YFrame, x, y, tint);
+        if (CurrentAnimation != null)
+            CurrentAnimation.Draw(sb, XFrame, YFrame, x, y, tint);
     }
 
     //load in animation set

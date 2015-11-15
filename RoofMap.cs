@@ -10,7 +10,7 @@ using System.IO;
 // BaseMap, which is always drawn under everything
 // CollisionMap, which is just true or false if there is a collision
 // (Optional)AlwaysMap, which is always drawn all the time.
-public class CollisionMap
+public class RoofMap : CollisionMap
 {
     // The base layer.
     public Texture2D BaseMap;
@@ -26,7 +26,7 @@ public class CollisionMap
     private int ScreenHeight;
 
   
-    public CollisionMap(string pathToMapXML, int screenWidth, int screenHeight)
+    public RoofMap(string pathToMapXML, int screenWidth, int screenHeight) : base(pathToMapXML,screenWidth, screenHeight)
     {
         this.ScreenWidth = screenWidth;
         this.ScreenHeight = screenHeight;
