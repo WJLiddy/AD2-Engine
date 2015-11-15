@@ -80,8 +80,15 @@ public class PixelFont
         {
             string character = ((char)i).ToString();
 
+            //Two ways to input width:
+            // _ASCIINUMBER_
+            // and _ALPHANUMBERIC
+
             if (fontdata.ContainsKey("_"+character))
                 Widths[i] = Int32.Parse(fontdata["_"+character].First.Value);
+
+            else if (fontdata.ContainsKey("_" + i.ToString() + "_"))
+                Widths[i] = Int32.Parse(fontdata["_" + i.ToString() + "_"].First.Value);
         }
 
         //fetch the font.
