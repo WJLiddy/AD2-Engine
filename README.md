@@ -14,8 +14,6 @@ You might consider using the AD2 engine if:
 - You want to run your game at a fixed resolution.
 
 We will make a couple of tiny games in the ad2 engine to show off how to use it, such as
-- A Platformer
-- A Flying Game (Done - see WJLIDDY/SkyKid)
-- A Block-Breaker (In progress - see CorruptData/Breakout)
-- A Top-Down Shooter
-- A Traditional Roguelike
+- A Flying Game (Done - see [WJLiddy's SkyKid](https://github.com/WJLiddy/SkyKid))
+- A Block-Breaker (Mostly Done - see [CorruptData's Vaporwave Breakout](https://github.com/CorruptData/breakout))
+- A Not-So-Traditional Roguelike (Just Started - see [Neutral Space's Basement Explorer](https://github.com/WJLiddy/BasementExplorer))
