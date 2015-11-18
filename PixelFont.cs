@@ -53,14 +53,15 @@ public class PixelFont
     }
 
     //return width of a given string. 
-    public int GetWidth(String s,bool outline)
+    public int GetWidth(string s,bool outline)
     {
         int width = 0;
         foreach (char c in s)
         {
             width += SpaceTakenByCharacter(1, c, outline);
         }
-        return width;
+        //ignore last space between letter.
+        return (width - SpaceBetweenLetters);
    }
 
     private int SpaceTakenByCharacter(int scale, int value, bool outline)

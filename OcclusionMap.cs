@@ -160,11 +160,12 @@ public class OcclusionMap : CollisionMap
 
             int index = ((x - cameraX) + (ScreenWidth * (y - cameraY)));
 
-            if (Walls[x, y])
+    
+            //TODO: Improve Walls[x,y] like boolean [x,y]
+            if (x < 0 || y < 0 || x >= BaseMap.Width || y >= BaseMap.Height || Walls[x, y])
                 return;
             else if (index >= 0 && index < ScreenWidth * ScreenHeight)
                 losData[index] = Color.Transparent;
-
         }
 
 
