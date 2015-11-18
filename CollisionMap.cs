@@ -22,8 +22,8 @@ public class CollisionMap
 
     // The width and the height of the game screen.
     // Needed for fast drawing (i.e., not rendering the whole map)
-    private int ScreenWidth;
-    private int ScreenHeight;
+    protected int ScreenWidth;
+    protected int ScreenHeight;
 
     protected Texture2D CollisionMaskMap;
 
@@ -57,27 +57,27 @@ public class CollisionMap
         }
         
         //fill the boolean array for colissions and walls.
-        Collision = getCollisionArray(CollisionMaskMap, collisionKey);
+        Collision = GetCollisionArray(CollisionMaskMap, collisionKey);
     }
 
-    public void drawBase(AD2SpriteBatch sb, int x, int y)
+    public void DrawBase(AD2SpriteBatch sb, int x, int y)
     {
        sb.Draw(BaseMap, new Rectangle(0, 0, ScreenWidth, ScreenHeight), new Rectangle(x, y, ScreenWidth, ScreenHeight), Color.White);
     }
 
-    public void drawAlways(AD2SpriteBatch sb, int x, int y)
+    public void DrawAlways(AD2SpriteBatch sb, int x, int y)
     {
         if (AlwaysMap == null)
             return;
         sb.Draw(AlwaysMap, new Rectangle(0, 0, ScreenWidth, ScreenHeight), new Rectangle(x, y, ScreenWidth, ScreenHeight), Color.White);
     }
 
-    public bool collide(int x, int y)
+    public virtual bool Collide(int x, int y)
     {
          return x < 0 || y < 0 || x >= BaseMap.Width || y >= BaseMap.Height || Collision[x, y];
     }
 
-    public bool[,] getCollisionArray(Texture2D collisionMap, Color collisionKey)
+    public bool[,] GetCollisionArray(Texture2D collisionMap, Color collisionKey)
     {
         //pull out the data.
         Color[] colorsMap = new Color[collisionMap.Width * collisionMap.Height];
