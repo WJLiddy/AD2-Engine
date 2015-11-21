@@ -18,9 +18,20 @@ public class OcclusionMap : CollisionMap
     private RenderTarget2D Roofs;
     // A batch for ORing the OccludeMap with the LineOfSight Map.
     private SpriteBatch RoofBatch;
+    // A Line Of Sight array of colors, to be written to the LOS Overlay.
+    private Color[] LOSTemp;
+    // An LOS overlay that is eventually drawn over everything else.
+    private Texture2D LOSOverlay;
+    public static readonly Color opaque = new Color(0, 0, 0, 1f);
+
+
 
     public OcclusionMap(string pathToMapXML, int screenWidth, int screenHeight) : base(pathToMapXML,screenWidth, screenHeight)
     {
+
+        LOSTemp = new Color[ScreenHeight * ScreenWidth];
+        LOSOverlay = new Texture2D(Renderer.GraphicsDevice, ScreenWidth, ScreenHeight);
+
         Dictionary<string, LinkedList<string>> mapXML = Utils.GetXMLEntriesHash(pathToMapXML);
         RoofBatch = new SpriteBatch(Renderer.GraphicsDevice);
         Roofs = new RenderTarget2D(Renderer.GraphicsDevice, ScreenWidth, screenHeight);
@@ -80,10 +91,6 @@ public class OcclusionMap : CollisionMap
     //Given coordinates and a camera, generates a transparent texture for all the places that the coords can 'see'
     public Texture2D getLOS(LinkedList<int[]> coords, int cameraX, int cameraY)
     {
-        Color[] LOSTemp = new Color[ScreenHeight * ScreenWidth];
-        Texture2D LOSOverlay = new Texture2D(Renderer.GraphicsDevice, ScreenWidth, ScreenHeight);
-        Color opaque = new Color(0, 0, 0, 1f);
-    
         //TODO: maybe faster using GPU?
         for (int i = 0; i != ScreenHeight * ScreenWidth; i++)
         {
