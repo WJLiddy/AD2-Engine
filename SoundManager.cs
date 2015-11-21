@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 
+//TODO: Singletonize?
 public class SoundManager
 {
     //A dictionary containing all of the sounds in the directory.
-    public static Dictionary<string, ISoundSource> SoundHash;
+    private static Dictionary<string, ISoundSource> SoundHash;
     //A sound engine for our sound needs.
-    public static ISoundEngine Engine;
+    private static ISoundEngine Engine;
     //Volume to play all of our sounds at.
-    public static readonly float VolumeMax= .3f;
+    private static readonly float VolumeMax= .3f;
 
     //Load sound from path, relative to PathToAssets.
     public static void Load(string path)
@@ -19,7 +20,7 @@ public class SoundManager
     }
 
     //Play a sound.
-    public void Play(string name,bool looped = false)
+    public static void Play(string name,bool looped = false)
     {
         if (SoundHash.ContainsKey(name))
         {
@@ -33,7 +34,7 @@ public class SoundManager
     }
 
     //Stop all Sounds.
-    public void Stop()
+    public static void Stop()
     {
         Engine.RemoveAllSoundSources();
     }
