@@ -112,7 +112,7 @@ public class Utils
     }
 
     //return random number, 0 through 1.
-    public static double randomNumber()
+    public static double RandomNumber()
     {
         return Random.NextDouble();
     }
@@ -122,5 +122,3 @@ public class Utils
         sb.DrawTexture(WhiteRect, x, y, w, h, c);
     }
 }
-
-
