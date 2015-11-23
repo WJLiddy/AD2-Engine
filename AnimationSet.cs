@@ -21,10 +21,13 @@ public class AnimationSet
     //The current sprite matrix being shown.
     private SpriteMatrix CurrentAnimation = null;
 
+
+    public string CurrentAnimationName { get; private set; } = null;
+
     //The current x-frame.
     private int XFrame = 0;
     //The current y-frame.
-    private int YFrame = 0;
+    public int YFrame { get; private set; } = 0;
 
     //Ticks until next xframe. Remember all animations run left to right.
     private int TicksLeftToNextFrame = 0;
@@ -48,6 +51,7 @@ public class AnimationSet
             Utils.Log("Tried to hold animation " + anim + " from " + AnimationPath + " but failed because animation did not exist");
             return;
         }
+        CurrentAnimationName = anim;
         CurrentAnimation = Animations[anim];
         Animate = false;
         XFrame = x;
@@ -63,6 +67,7 @@ public class AnimationSet
             return;
         }
         CurrentAnimation = Animations[anim];
+        CurrentAnimationName = anim;
         YFrame = y;
         XFrame = 0;
         TicksLeftToNextFrame = Speed;

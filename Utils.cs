@@ -117,7 +117,7 @@ public class Utils
         return Random.NextDouble();
     }
 
-    public static void drawRect(AD2SpriteBatch sb, int x, int y, int w, int h, Color c)
+    public static void DrawRect(AD2SpriteBatch sb, int x, int y, int w, int h, Color c)
     {
         sb.DrawTexture(WhiteRect, x, y, w, h, c);
     }
