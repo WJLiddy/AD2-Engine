@@ -26,7 +26,7 @@ public class PixelFont
         LoadFontFromXML(pathToFile);
     }
 
-    public void Draw(SpriteBatch sb, string s, int x, int y, Color col, int scale = 1, bool outline = false){
+    public void Draw(SpriteBatch sb, string s, int x, int y, Color col, int scale = 1, bool outline = false, Color ? outlineCol = null){
 
         //where we are putting the next letter relaive to the x
         int xCursor = 0; 
@@ -38,10 +38,10 @@ public class PixelFont
             //Draws a black underline of the letter.
             if (outline)
             {
-                sb.Draw(Font, new Rectangle(x + scale + xCursor, y, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
-                sb.Draw(Font, new Rectangle(x + -scale + xCursor, y, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
-                sb.Draw(Font, new Rectangle(x + xCursor, y + scale, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
-                sb.Draw(Font, new Rectangle(x + xCursor, y - scale , scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), Color.Black);
+                sb.Draw(Font, new Rectangle(x + scale + xCursor, y, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), outlineCol ?? Color.Black);
+                sb.Draw(Font, new Rectangle(x + -scale + xCursor, y, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), outlineCol ?? Color.Black);
+                sb.Draw(Font, new Rectangle(x + xCursor, y + scale, scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), outlineCol ?? Color.Black);
+                sb.Draw(Font, new Rectangle(x + xCursor, y - scale , scale * Widths[value], scale * Height), new Rectangle(0, value * Height, Widths[value], Height), outlineCol ?? Color.Black);
             }
 
             //Draws the actual letter.
