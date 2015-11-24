@@ -167,9 +167,7 @@ public class OcclusionMap : CollisionMap
 
             int index = ((x - cameraX) + (ScreenWidth * (y - cameraY)));
 
-    
-            //TODO: Improve Walls[x,y] like boolean [x,y]
-            if (x < 0 || y < 0 || x >= BaseMap.Width || y >= BaseMap.Height || Walls[x, y])
+            if (Wall(x, y))
                 return;
             else if (index >= 0 && index < ScreenWidth * ScreenHeight)
                 losData[index] = Color.Transparent;
@@ -181,6 +179,11 @@ public class OcclusionMap : CollisionMap
     public override bool Collide(int x, int y)
     {
         return base.Collide(x, y) || Walls[x, y];
+    }
+
+    public bool Wall(int x, int y)
+    {
+        return x < 0 || y < 0 || x >= BaseMap.Width || y >= BaseMap.Height || Walls[x, y];
     }
 
 }
