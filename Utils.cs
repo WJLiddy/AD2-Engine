@@ -47,8 +47,14 @@ public class Utils
     //Loads a basic rectangle, some text, some sounds. And a RNG.
     public static void Load()
     {
-        WhiteRect = Utils.TextureLoader(@"..\..\API\assets\rect.png");
-        DefaultFont = new PixelFont(@"..\..\API\assets\spireFont.xml");
+        #if DEBUG
+            WhiteRect = Utils.TextureLoader(@"..\..\API\assets\rect.png");
+            DefaultFont = new PixelFont(@"..\..\API\assets\spireFont.xml");
+        #else
+            WhiteRect = Utils.TextureLoader(@"rect.png");
+            DefaultFont = new PixelFont(@"spireFont.xml");
+        #endif
+
         SoundManager.Load("sounds/");
         Random = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
     }

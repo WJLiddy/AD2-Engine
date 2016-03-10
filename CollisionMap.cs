@@ -62,7 +62,7 @@ public class CollisionMap
 
     public void DrawBase(AD2SpriteBatch sb, int x, int y)
     {
-       sb.Draw(BaseMap, new Rectangle(0, 0, ScreenWidth, ScreenHeight), new Rectangle(x, y, ScreenWidth, ScreenHeight), Color.White);
+        sb.Draw(BaseMap, new Rectangle(0, 0, ScreenWidth, ScreenHeight), new Rectangle(x, y, ScreenWidth, ScreenHeight), Color.White);
     }
 
     public void DrawAlways(AD2SpriteBatch sb, int x, int y)

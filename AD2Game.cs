@@ -14,6 +14,9 @@ public abstract class AD2Game : Game
     // Use this to play sounds and stuff
     protected SoundManager Manager;
 
+    // For handling controllers.
+    private ControllerManager ControllerManager;
+
     int BaseHeight;
     int BaseWidth;
 
@@ -21,9 +24,12 @@ public abstract class AD2Game : Game
     // Create a game with the passed in resolution and the msPerFrame
     public AD2Game(int baseWidth, int baseHeight, int msPerFrame)
     {
-        // Set path to assets
-        // TODO: Only works on debug releases
-        Utils.SetAssetDirectory(@"..\..\..\assets\");
+
+        #if DEBUG
+            Utils.SetAssetDirectory(@"..\..\..\assets\");
+        #else
+            Utils.SetAssetDirectory(@"assets\");
+        #endif
         this.BaseWidth = baseWidth;
         this.BaseHeight = baseHeight;
 
@@ -33,6 +39,8 @@ public abstract class AD2Game : Game
         // Set up the fixed FPS here.
         IsFixedTimeStep = true;
         TargetElapsedTime = TimeSpan.FromMilliseconds(msPerFrame);
+
+        ControllerManager = new ControllerManager();
     }
 
     // Here we instantiate the Graphics Device, set the screen res, then allow the users to load stuff
@@ -45,22 +53,12 @@ public abstract class AD2Game : Game
         AD2LoadContent();
     }
 
-    //Get the controller Status
     protected override void Update(GameTime gameTime)
-    {
-        // Check the device for Player One
-        GamePadState[] gamepads = new GamePadState[4]{
-            GamePad.GetState(PlayerIndex.One),
-            GamePad.GetState(PlayerIndex.Two),
-            GamePad.GetState(PlayerIndex.Three),
-            GamePad.GetState(PlayerIndex.Four)
-        };
-
-        //If Keyboard.getState can be static then so can Renderer!
-        AD2Logic(gameTime.ElapsedGameTime.Milliseconds, Keyboard.GetState(), gamepads);
+    {   
+        AD2Logic(gameTime.ElapsedGameTime.Milliseconds, Keyboard.GetState(), ControllerManager.GetState());
     }
 
-    protected abstract void AD2Logic(int ms, KeyboardState keyboardState, GamePadState[] gamePadState);
+    protected abstract void AD2Logic(int ms, KeyboardState keyboardState, SlimDX.DirectInput.JoystickState[] joyStickState);
 
     protected abstract void AD2Draw(AD2SpriteBatch primarySpriteBatch);
 
