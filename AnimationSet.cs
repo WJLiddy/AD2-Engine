@@ -19,13 +19,13 @@ public class AnimationSet
     public int Speed = 1;
 
     //The current sprite matrix being shown.
-    private SpriteMatrix CurrentAnimation = null;
+    public SpriteMatrix CurrentAnimation { get; private set; }
 
 
     public string CurrentAnimationName { get; private set; } = null;
 
     //The current x-frame.
-    private int XFrame = 0;
+    public int XFrame { get; private set; } = 0;
     //The current y-frame.
     public int YFrame { get; private set; } = 0;
 
@@ -61,6 +61,7 @@ public class AnimationSet
     //starts looping animation. If animation is already in progress, does nothing
     public void AutoAnimate(string anim, int y)
     {
+        AnimateOnce = false;
         if (!Animations.ContainsKey(anim))
         {
             Utils.Log("Tried to animate animation " + anim + " from " + AnimationPath + " but failed because animation did not exist");
@@ -142,5 +143,6 @@ public class AnimationSet
         }
         return loadedAnimations;
     }
+
 }
 
