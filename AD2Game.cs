@@ -20,6 +20,8 @@ public abstract class AD2Game : Game
     int BaseHeight;
     int BaseWidth;
 
+    bool RunningSlowly;
+
 
     // Create a game with the passed in resolution and the msPerFrame
     public AD2Game(int baseWidth, int baseHeight, int msPerFrame)
@@ -54,7 +56,8 @@ public abstract class AD2Game : Game
     }
 
     protected override void Update(GameTime gameTime)
-    {   
+    {
+        RunningSlowly = gameTime.IsRunningSlowly;
         AD2Logic(gameTime.ElapsedGameTime.Milliseconds, Keyboard.GetState(), ControllerManager.GetState());
     }
 
@@ -72,5 +75,10 @@ public abstract class AD2Game : Game
         PrimarySpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Renderer.MatrixScale);
         AD2Draw(PrimarySpriteBatch);
         PrimarySpriteBatch.End();
+    }
+
+    protected bool IsRunningSlowly()
+    {
+        return RunningSlowly;
     }
 }

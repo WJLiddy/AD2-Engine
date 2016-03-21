@@ -44,14 +44,15 @@
   <ItemGroup>
     <Compile Include="AD2SpriteBatch.cs" />
     <Compile Include="AD2Game.cs" />
-    <Compile Include="OcclusionMap.cs" />
+    <Compile Include="ObjectMap.cs" />
+    <None Include="OcclusionMap.cs.old" />
     <Compile Include="CollisionMap.cs" />
     <Compile Include="PixelFont.cs" />
     <Compile Include="AnimationSet.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="SpriteMatrix.cs" />
     <Compile Include="ControllerManager.cs" />
-    <Compile Include="ObliqueMap.cs" />
+    <None Include="ObliqueMap.cs.old" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="Utils.cs" />
